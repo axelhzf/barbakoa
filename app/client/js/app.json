@@ -1,0 +1,6 @@
+[
+  "components/underscore/underscore.js",
+  "components/jquery/dist/jquery",
+  "components/angular/angular.js",
+  "js/app/*.js"
+]

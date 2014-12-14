@@ -1,0 +1,10 @@
+extends ../layout
+block content
+  h1 ERROR
+
+  if env === "development"
+    .stack
+      pre
+        code #{stack}
+
+

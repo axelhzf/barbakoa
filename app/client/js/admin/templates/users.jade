@@ -1,0 +1,26 @@
+section.content-header
+  h1 Users
+
+section.content
+  .box
+    .box-body.no-padding
+      table.table.users(ng-if="users.items.length")
+        thead
+          tr
+            th ID
+            th
+            th Name
+        tbody
+          tr(ng-repeat="user in users.items")
+            td {{user.id}}
+            td
+              img(ng-src="{{user.photo}}")
+            td {{user.displayName}}
+
+
+      .box-footer.center.pagination-footer
+        ul.pagination.pagination-sm
+          li: a(ng-click="users.findPreviousPage()") «
+          li(ng-repeat="page in users.pages")
+            a(ng-click="users.findPage(page)", ng-class="{'active': page === users.currentPage}") {{page + 1}}
+          li: a(ng-click="users.findNextPage()") »

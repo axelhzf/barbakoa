@@ -1,0 +1,8 @@
+.idea
+*.iml
+
+node_modules
+logs
+run.sh
+app/.assets
+app/client/components

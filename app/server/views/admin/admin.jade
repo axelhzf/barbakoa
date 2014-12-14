@@ -1,0 +1,39 @@
+extends ../layout
+
+block head
+  link(rel='stylesheet', href="/assets/style/admin.css")
+
+block body
+  header.header
+    nav.frame
+      a.logo(href="/") #{config.name}
+      nav.navbar.navbar-static-top
+        .navbar-right
+          ul.nav.navbar-nav
+            li.user
+              a #{user.displayName}
+            li
+              a(href="#{routeUrl('logout')}", title="Logout")
+                i.fa.fa-sign-out
+
+
+
+
+  .wrapper(ng-app="admin", class="skin-blue")
+    aside.left-side
+      section.sidebar
+        ul.sidebar-menu
+          li
+            a(href="/admin")
+              i.fa.fa-dashboard
+              span Dashboard
+          li
+            a(href="/admin#users")
+              i.fa.fa-users
+              span Users
+
+
+    ng-view.right-side
+
+
+    script(src="/assets/js/admin/admin.js")
