@@ -14,11 +14,11 @@ var staticCache = require('koa-static-cache');
 var config = require("config");
 var logger = require("./logger");
 var db = require("./db");
-var routes = require("./routes");
+var router = require("./router");
 var cron = require("./cron");
 
 
-module.exports = function barbakoa() {
+function barbakoa() {
 
   var app = koa();
 
@@ -42,6 +42,8 @@ module.exports = function barbakoa() {
   app.use(flash());
 
 
+
+
 //locals
   app.use(function *(next) {
     this.locals = {
@@ -50,23 +52,24 @@ module.exports = function barbakoa() {
       csrf: this.csrf,
       config: config,
       requestPath: this.request.path,
-      routeUrl: routes.routeUrl
+      routeUrl: router.routeUrl
     };
     yield *next;
   });
-
-//routes
-  routes.configure(app);
 
 
 // server methods
   var server;
 
   app.start = function () {
+    console.log("start");
+
     co(function * () {
       if (config.get("db.sync")) {
         yield db.syncAllModels();
       }
+
+      router.configure(app);
 
       server = app.listen(config.get("port"));
 
@@ -75,8 +78,8 @@ module.exports = function barbakoa() {
         require("../../gulpfile");
         gulp.start("watch");
       }
-    }).catch(function () {
-
+    }).catch(function (e) {
+      console.log(e.stack);
     });
   };
 
@@ -95,4 +98,8 @@ module.exports = function barbakoa() {
 
 };
 
+
+barbakoa.router = router;
+
+module.exports = barbakoa;
 
