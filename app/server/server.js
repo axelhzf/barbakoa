@@ -100,6 +100,7 @@ function barbakoa() {
 
 
 barbakoa.router = router;
+barbakoa.db = db;
 
 module.exports = barbakoa;
 

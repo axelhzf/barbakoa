@@ -5,8 +5,6 @@ var Sequelize = require("sequelize");
 var config = require("config");
 var debug = require("debug")("sql");
 
-//Define global data types
-Sequelize.URL = Sequelize.STRING(2083);
 
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
   logging: debug
@@ -15,7 +13,17 @@ var db = new Sequelize(config.get("db.database"), config.get("db.username"), con
 db.syncAllModels = function (options) {
   options || (options = {});
 
-  var modelPath = path.join(__dirname, "./models");
+  var appPath = path.join(process.cwd(), "app", "server", "models");
+  var frameworkPath = path.join(__dirname, "..", "models");
+
+  return syncModelInPath(appPath);
+};
+
+
+function syncModelInPath (modelPath) {
+  var options = {};
+  console.log("sync models from path", modelPath);
+
   var modelFiles = fs.readdirSync(modelPath);
 
   modelFiles.forEach(function (file) {
@@ -23,7 +31,8 @@ db.syncAllModels = function (options) {
   });
 
   return db.sync({force: options.force});
-};
+}
+
 
 var transaction = db.transaction.bind(db);
 db.transaction = function () {
@@ -33,5 +42,10 @@ db.transaction = function () {
     });
   }
 };
+
+
+var DataTypes = require("sequelize/lib/data-types");
+db.types = DataTypes;
+db.types.URL = db.types.STRING(2083);
 
 module.exports = db;
