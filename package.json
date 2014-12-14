@@ -1,5 +1,5 @@
 {
-  "name": "koa-base-app",
+  "name": "barbakoa",
   "version": "0.0.1",
   "dependencies": {
     "bunyan": "^1.2.3",
@@ -75,6 +75,7 @@
     "mocha": "^2.0.1",
     "nodemon": "^1.2.1"
   },
+  "main": "app/server/server.js",
   "scripts": {
     "install": "",
     "start": "node --harmony app/server/server.js",
