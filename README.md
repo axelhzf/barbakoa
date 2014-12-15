@@ -57,7 +57,7 @@ router.get("/api/users", function* () {
 
 Barbakoa comes with several gulp tasks defined.
 
-Define your `gulpfile` like this to import this tasks
+Define your `gulpfile` like this to import these tasks
 
 ```js
 var gulp = require("gulp");
