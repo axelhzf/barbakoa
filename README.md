@@ -48,7 +48,7 @@ module.exports = db.define("User", {
 var User = require("./models/User");
 router.get("/api/users", function* () {
   var users = yield User.findAll();
-  this.body = {user: user};
+  this.body = {users: users};
 });
 ```
 
