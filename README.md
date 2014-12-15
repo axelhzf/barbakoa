@@ -7,9 +7,9 @@ See [axelhzf/barbakoa-base-app](https://github.com/axelhzf/barbakoa-base-app) fo
 ## Create an application
 
 ```js
-    var barbakoa = require("barbakoa");
-    var app = new barbakoa();
-    app.start();
+var barbakoa = require("barbakoa");
+var app = new barbakoa();
+app.start();
 ```
 
 ## Router
