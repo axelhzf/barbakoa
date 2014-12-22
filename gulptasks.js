@@ -25,8 +25,6 @@ module.exports = function (gulp) {
     clean: [base + "/app/.assets"]
   };
 
-  console.log(paths);
-
   gulp.task("less", function () {
     gulp.src(paths.less.src + "/main.less")
       .pipe(less({
@@ -49,7 +47,7 @@ module.exports = function (gulp) {
       .pipe(gulp.dest(paths.js.dest));
   });
 
-  gulp.task('watch', function () {
+  gulp.task('watch', ["build"], function () {
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
     gulp.watch([paths.js.src + "**/*.js"], ["es6"]);

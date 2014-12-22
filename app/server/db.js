@@ -1,38 +1,49 @@
 var path = require("path");
-var fs = require("fs");
 var _ = require("underscore");
 var Sequelize = require("sequelize");
 var config = require("config");
 var debug = require("debug")("sql");
+var fs = require("mz/fs");
 
 
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
   logging: debug
 });
 
-db.syncAllModels = function (options) {
-  options || (options = {});
-
-  var appPath = path.join(process.cwd(), "app", "server", "models");
-  var frameworkPath = path.join(__dirname, "..", "models");
-
-  return syncModelInPath(appPath);
+db.initialize = function* () {
+  if (config.get("db.sync")) {
+    yield syncModels();
+  }
 };
 
+function* syncModels() {
+  var paths = [
+    path.join(process.cwd(), "app", "server", "models"),
+    path.join(__dirname, "models")
+  ];
 
-function syncModelInPath (modelPath) {
-  var options = {};
-  console.log("sync models from path", modelPath);
+  var allModels = [];
+  for (var i = 0; i < paths.length; i++) {
+    var modelPath = paths[i];
+    var models = yield requireModelsAtPath(modelPath);
+    allModels = allModels.concat(models);
+  }
 
-  var modelFiles = fs.readdirSync(modelPath);
+  console.log("Syncing models ", allModels);
 
+  var syncOptions = {
+    force: config.get("db.forceSync")
+  };
+  yield db.sync(syncOptions);
+}
+
+function* requireModelsAtPath(modelPath) {
+  var modelFiles = yield fs.readdir(modelPath);
   modelFiles.forEach(function (file) {
     require(path.join(modelPath, file));
   });
-
-  return db.sync({force: options.force});
+  return modelFiles;
 }
-
 
 var transaction = db.transaction.bind(db);
 db.transaction = function () {

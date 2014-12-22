@@ -8,7 +8,8 @@ module.exports = {
     username: "root",
     password: "",
     database: "koa-base-app",
-    sync: true
+    sync: true,
+    forceSync: false
   },
   logs: {
     request: true,
@@ -23,5 +24,9 @@ module.exports = {
   },
   errors: {
     debug: true
+  },
+  path: {
+    app: path.join(process.cwd()),
+    framework: __dirname
   }
 };

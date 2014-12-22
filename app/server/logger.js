@@ -5,7 +5,7 @@ var config = require("config");
 var mkdirp = require("mkdirp");
 
 var logFilename = path.normalize(config.get("logs.path") + "/" + config.get("name") + ".log");
-mkdirp(path.normalize(config.logs.path));
+mkdirp(path.normalize(config.get("logs.path")));
 
 var log = bunyan.createLogger({
   name: config.name,

@@ -17,6 +17,9 @@ var db = require("./db");
 var router = require("./router");
 var cron = require("./cron");
 
+var path = require("path");
+var assets = require("./assets");
+
 
 function barbakoa() {
 
@@ -42,8 +45,6 @@ function barbakoa() {
   app.use(flash());
 
 
-
-
 //locals
   app.use(function *(next) {
     this.locals = {
@@ -65,21 +66,13 @@ function barbakoa() {
     console.log("start");
 
     co(function * () {
-      if (config.get("db.sync")) {
-        yield db.syncAllModels();
-      }
-
+      yield db.initialize();
       router.configure(app);
+      yield assets.initialize();
 
       server = app.listen(config.get("port"));
-
-      if (config.get("assets.reload")) {
-        var gulp = require("gulp");
-        require("../../gulpfile");
-        gulp.start("watch");
-      }
     }).catch(function (e) {
-      console.log(e.stack);
+      console.trace("Error", e.stack);
     });
   };
 
@@ -96,7 +89,7 @@ function barbakoa() {
 
   return app;
 
-};
+}
 
 
 barbakoa.router = router;
