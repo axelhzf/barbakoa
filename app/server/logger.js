@@ -21,6 +21,6 @@ var log = bunyan.createLogger({
 //  log.info(msg);
 //};
 
-log.info("Writing logging to %s", logFilename);
+//log.info("Writing logging to %s", logFilename);
 
 module.exports = log;

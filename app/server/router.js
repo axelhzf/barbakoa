@@ -6,12 +6,6 @@ var tweetApi = require("./api/tweetApi");
 
 var router = new koaRouter();
 
-router.get("/", indexController.index);
-router.get("/api/users", userApi.list);
-router.get("/api/users/:id", userApi.get);
-router.get("/api/tweets", tweetApi.list);
-router.get("/api/tweets/:id", tweetApi.get);
-
 router.configure = function (app) {
   app.use(notFound);
   app.use(router.middleware());

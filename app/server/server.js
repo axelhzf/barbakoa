@@ -25,8 +25,10 @@ function barbakoa() {
 
   var app = koa();
 
-  app.use(views('views', {
-    default: 'jade'
+  var viewPath = path.join(config.get("path.app"), "app", "server", "views");
+  app.use(views(viewPath, {
+    default: 'jade',
+    ext: "jade"
   }));
 
   mountStatic("/assets", __dirname + '/../.assets');

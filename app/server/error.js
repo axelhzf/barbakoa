@@ -45,16 +45,17 @@ function error(opts) {
 
         case 'html':
           var stack = err.stack;
-          yield this.render("error/error", {
-            debug: debugErrors,
-            ctx: this,
-            request: this.request,
-            response: this.response,
-            error: err.message,
-            stack: stack,
-            status: this.status,
-            code: err.code
-          });
+          yield this.render("error/error", {stack: stack});
+          //yield this.render("error/error", {
+          //  debug: debugErrors,
+          //  ctx: this,
+          //  request: this.request,
+          //  response: this.response,
+          //  error: err.message,
+          //  stack: stack,
+          //  status: this.status,
+          //  code: err.code
+          //});
           break;
       }
     }
