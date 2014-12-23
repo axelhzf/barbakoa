@@ -19,7 +19,6 @@ var cron = require("./cron");
 var path = require("path");
 var assets = require("./assets");
 
-
 function barbakoa() {
 
   var app = koa();
@@ -106,6 +105,7 @@ function barbakoa() {
 
 barbakoa.router = router;
 barbakoa.db = db;
+barbakoa.assets = assets;
 
 module.exports = barbakoa;
 

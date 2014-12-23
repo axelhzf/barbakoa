@@ -19,14 +19,14 @@ module.exports = function (gulp) {
       dest: base + "/app/.assets/templates"
     },
     js: {
-      src: base + "/app/client/js",
+      src: base + "/app/client",
       dest: base + "/app/.assets/js"
     },
     clean: [base + "/app/.assets"]
   };
 
   gulp.task("less", function () {
-    gulp.src(paths.less.src + "/main.less")
+    gulp.src(paths.less.src + "/app.less")
       .pipe(less({
         //paths: ["node_modules"] //change to bower components?
       }))

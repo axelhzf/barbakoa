@@ -3,6 +3,7 @@ var config = require("config");
 var gutil = require("gulp-util");
 var chalk = require("chalk");
 var prettyTime = require('pretty-hrtime');
+var glob = require("simple-glob");
 
 exports.initialize = function* () {
   if (config.get("assets.reload")) {
@@ -46,4 +47,27 @@ exports.initialize = function* () {
     gulp.start("watch");
 
   }
+};
+
+exports.getModule = function (moduleName) {
+  var pathApp = config.get("path.app");
+  var m = require(path.join(pathApp, "app", "client", moduleName + ".json"));
+
+  var files = m.components.map(function (m) {
+    var moduleBase = path.join(pathApp, "app", "client", "components", m);
+    var bjson = require(path.join(moduleBase, "bower.json"));
+    var main = bjson.main;
+    return path.join("components", m, main);
+  });
+
+  var jss = glob({cwd: path.join(pathApp, "app", "client", "js")}, m.js);
+  jss = jss.map(function (file) {
+    return "js/" + file;
+  });
+  files = files.concat(jss);
+
+  return {
+    js: files,
+    style: "style/" + moduleName + ".css"
+  };
 };
