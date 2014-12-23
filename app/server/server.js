@@ -9,14 +9,13 @@ var mount = require("koa-mount");
 var session = require('koa-session');
 var flash = require("koa-flash");
 var staticCache = require('koa-static-cache');
-//var csrf = require('./lib/csrf');
-
+var static = require("koa-static");
+var fs = require("mz/fs");
 var config = require("config");
 var logger = require("./logger");
 var db = require("./db");
 var router = require("./router");
 var cron = require("./cron");
-
 var path = require("path");
 var assets = require("./assets");
 
@@ -25,15 +24,18 @@ function barbakoa() {
 
   var app = koa();
 
-  var viewPath = path.join(config.get("path.app"), "app", "server", "views");
+  var appPath = path.join(config.get("path.app"), "app");
+
+  var viewPath = path.join(appPath, "server", "views");
   app.use(views(viewPath, {
     default: 'jade',
     ext: "jade"
   }));
 
-  mountStatic("/assets", __dirname + '/../.assets');
-  mountStatic("/assets", __dirname + '/../assets');
-  mountStatic("/assets", __dirname + '/../client');
+  console.log("jelou!");
+  mountStatic("/assets", path.join(appPath, '.assets'));
+  mountStatic("/assets", path.join(appPath, '/assets'));
+  mountStatic("/assets", path.join(appPath, '/client'));
 
 
   if (config.get("logs.request")) {
@@ -83,10 +85,18 @@ function barbakoa() {
   };
 
   function mountStatic(url, path) {
-    logger.info("mounting %s to %s", path, url);
-    var assets = koa();
-    assets.use(staticCache(path));
-    app.use(mount(url, assets));
+    var staticLib = config.get("assets.cache") ? require("koa-static-cache"): require("koa-static");
+    co(function* () {
+      var exists = yield fs.exists(path);
+      if (exists) {
+        console.log("mounting %s to %s", path, url);
+        var assets = koa();
+        assets.use(staticLib(path));
+        app.use(mount(url, assets));
+      } else {
+        console.log("path %s doesn't exists", path);
+      }
+    });
   }
 
   return app;

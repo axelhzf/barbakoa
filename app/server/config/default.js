@@ -20,6 +20,7 @@ module.exports = {
   },
   assets: {
     reload: true,
+    cache: false,
     min: false
   },
   errors: {
