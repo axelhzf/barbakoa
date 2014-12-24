@@ -5,6 +5,8 @@ module.exports = function (gulp) {
   var to5 = require('gulp-6to5');
   var del = require("del");
   var jade = require("gulp-jade");
+  var ngHtml2Js = require("gulp-ng-html2js");
+  var concat = require("gulp-concat");
 
   var base = process.cwd();
 
@@ -19,7 +21,7 @@ module.exports = function (gulp) {
       dest: base + "/app/.assets/templates"
     },
     js: {
-      src: base + "/app/client",
+      src: base + "/app/client/js",
       dest: base + "/app/.assets/js"
     },
     clean: [base + "/app/.assets"]
@@ -38,6 +40,11 @@ module.exports = function (gulp) {
   gulp.task("jade", function () {
     gulp.src(paths.jade.src + "/*.jade")
       .pipe(jade())
+      .pipe(ngHtml2Js({
+        moduleName: "app",
+        prefix: "templates/"
+      }))
+      .pipe(concat("templates.js"))
       .pipe(gulp.dest(paths.jade.dest))
   });
 
