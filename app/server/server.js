@@ -32,9 +32,6 @@ function barbakoa() {
   }));
 
   mountStatic("/assets", path.join(appPath, '.assets'));
-  mountStatic("/assets", path.join(appPath, '/assets'));
-  mountStatic("/assets", path.join(appPath, '/client'));
-
 
   if (config.get("logs.request")) {
     app.use(require("koa-logger")());
