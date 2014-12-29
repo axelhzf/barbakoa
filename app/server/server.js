@@ -31,7 +31,6 @@ function barbakoa() {
     ext: "jade"
   }));
 
-  console.log("jelou!");
   mountStatic("/assets", path.join(appPath, '.assets'));
   mountStatic("/assets", path.join(appPath, '/assets'));
   mountStatic("/assets", path.join(appPath, '/client'));
@@ -66,8 +65,6 @@ function barbakoa() {
   var server;
 
   app.start = function () {
-    console.log("start");
-
     co(function * () {
       yield db.initialize();
       router.configure(app);
