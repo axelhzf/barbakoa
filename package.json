@@ -4,7 +4,6 @@
   "dependencies": {
     "bunyan": "^1.2.3",
     "chalk": "^0.5.1",
-    "clean": "^4.0.1",
     "co": "~4.0.1",
     "co-busboy": "^1.2.0",
     "co-emitter": "^0.2.3",
@@ -23,7 +22,6 @@
     "fb": "^0.7.0",
     "font-awesome": "^4.2.0",
     "forever": "^0.13.0",
-    "gulp-clean": "^0.3.1",
     "gulp-consolidate": "^0.1.2",
     "gulp-gm": "0.0.7",
     "gulp-jade": "^0.6.1",
