@@ -52,6 +52,18 @@ router.get("/api/users", function* () {
 });
 ```
 
+### Events
+
+```js
+barbakoa.on("post-start", function* () {
+
+});
+```
+
+Events:
+* pre-start
+* post-start
+
 
 ## Gulp
 

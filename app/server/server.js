@@ -18,6 +18,7 @@ var router = require("./router");
 var cron = require("./cron");
 var path = require("path");
 var assets = require("./assets");
+var events = require("./events");
 
 function barbakoa() {
 
@@ -63,11 +64,12 @@ function barbakoa() {
 
   app.start = function () {
     co(function * () {
+      yield events.emit("pre-start");
       yield db.initialize();
       router.configure(app);
       yield assets.initialize();
-
       server = app.listen(config.get("port"));
+      yield events.emit("post-start");
     }).catch(function (e) {
       console.trace("Error", e.stack);
     });
@@ -96,7 +98,7 @@ function barbakoa() {
 
 }
 
-
+barbakoa.events = events;
 barbakoa.router = router;
 barbakoa.db = db;
 barbakoa.assets = assets;

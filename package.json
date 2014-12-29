@@ -7,6 +7,7 @@
     "clean": "^4.0.1",
     "co": "~4.0.1",
     "co-busboy": "^1.2.0",
+    "co-emitter": "^0.2.3",
     "co-fs": "^1.2.0",
     "co-mysql": "~1.0.0",
     "co-parallel": "^1.0.0",
