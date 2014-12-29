@@ -80,7 +80,6 @@
     "gulp-ng-annotate": "^0.4.3",
     "gulp-ng-html2js": "^0.1.8",
     "gulp-ngmin": "^0.3.0",
-    "merge-stream": "^0.1.6",
     "mocha": "^2.0.1",
     "nodemon": "^1.2.1",
     "streamqueue": "^0.1.1"
