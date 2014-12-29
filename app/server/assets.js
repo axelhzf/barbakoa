@@ -4,6 +4,8 @@ var gutil = require("gulp-util");
 var chalk = require("chalk");
 var prettyTime = require('pretty-hrtime');
 var glob = require("simple-glob");
+var _ = require("underscore");
+var _s = require("underscore.string");
 
 exports.initialize = function* () {
   if (config.get("assets.reload")) {
@@ -57,7 +59,18 @@ exports.expandModule = function (moduleName) {
     var moduleBase = path.join(pathApp, "app", "client", "components", m);
     var bjson = require(path.join(moduleBase, "bower.json"));
     var main = bjson.main;
-    return path.join("components", m, main);
+
+    if (_.isArray(main)) {
+      main = _.find(main, function (file) {
+        return _s.endsWith(file, ".js");
+      });
+    }
+
+    if (main) {
+      return path.join("components", m, main);
+    } else {
+      return "";
+    }
   });
 
   return {

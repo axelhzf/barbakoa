@@ -13,7 +13,6 @@ function JobsQueue() {
 util.inherits(JobsQueue, EventEmitter);
 
 JobsQueue.prototype.addJob = function (name, parameters) {
-  console.log("add job", arguments);
   var self = this;
   return co(function* () {
     debug("add job %s %s", name, JSON.stringify(parameters));
@@ -23,7 +22,6 @@ JobsQueue.prototype.addJob = function (name, parameters) {
 };
 
 JobsQueue.prototype.addWorker = function (name, parallel, process) {
-  console.log("add worker", arguments);
   this.workers.push({name: name, parallel: parallel, process: process});
 };
 
