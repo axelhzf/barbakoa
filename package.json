@@ -57,7 +57,6 @@
     "sequelize": "^2.0.0-rc3",
     "simple-glob": "^0.1.0",
     "thunkify": "^2.1.2",
-    "time": "^0.11.0",
     "twit": "^1.1.18",
     "underscore": "^1.7.0",
     "underscore.string": "^2.4.0",
