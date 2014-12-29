@@ -1,9 +1,5 @@
 var koaRouter = require("koa-router");
 
-var indexController = require("./controllers/indexController");
-var userApi = require("./api/userApi");
-var tweetApi = require("./api/tweetApi");
-
 var router = new koaRouter();
 
 router.configure = function (app) {

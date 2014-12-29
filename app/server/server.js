@@ -100,6 +100,7 @@ function barbakoa() {
 barbakoa.router = router;
 barbakoa.db = db;
 barbakoa.assets = assets;
+barbakoa.JobsQueue = require("./lib/JobsQueue");
 
 module.exports = barbakoa;
 
