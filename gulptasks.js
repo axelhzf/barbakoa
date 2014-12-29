@@ -13,6 +13,8 @@ module.exports = function (gulp) {
   var ngAnnotate = require('gulp-ng-annotate');
   var gulpif = require("gulp-if");
   var streamqueue = require('streamqueue');
+  var cached = require("gulp-cached");
+  var remember = require("gulp-remember");
 
   var base = process.cwd();
 
@@ -63,8 +65,14 @@ module.exports = function (gulp) {
 
     var cwd = base + "/app/client/";
 
-    var js = gulp.src(moduleContent.js, {cwd: cwd, base: cwd})
-      .pipe(to5());
+    var js = moduleContent.js.map(function (item) {
+      return "js/" + item;
+    });
+
+    var js = gulp.src(js, {cwd: cwd, base: cwd})
+      .pipe(cached())
+      .pipe(to5())
+      .pipe(remember());
     var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
     var merged = streamqueue({ objectMode: true }, components, js);
 

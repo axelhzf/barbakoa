@@ -21,7 +21,7 @@ module.exports = {
   assets: {
     reload: true,
     cache: false,
-    min: true
+    min: false
   },
   errors: {
     debug: true

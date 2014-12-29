@@ -60,13 +60,9 @@ exports.expandModule = function (moduleName) {
     return path.join("components", m, main);
   });
 
-  var js = glob({cwd: path.join(pathApp, "app", "client", "js")}, m.js).map(function (file) {
-    return "js/" + file;
-  });
-
   return {
     components: components,
-    js: js,
+    js: m.js,
     style: m.style
   };
 
@@ -77,7 +73,11 @@ exports.getModule = function (moduleName) {
   var js;
   if (!min) {
     var m = exports.expandModule(moduleName);
-    js = m.components.concat(m.js);
+    var pathApp = config.get("path.app");
+    js = glob({cwd: path.join(pathApp, "app", "client", "js")}, m.js).map(function (file) {
+      return "js/" + file;
+    });
+    js = m.components.concat(js);
   } else {
     js = ["js/" + moduleName + ".js"]
   }
