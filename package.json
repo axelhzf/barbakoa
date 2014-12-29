@@ -11,6 +11,7 @@
     "co-mysql": "~1.0.0",
     "co-parallel": "^1.0.0",
     "co-request": "^0.2.0",
+    "co-views": "^0.2.0",
     "config": "^1.9.0",
     "cron": "^1.0.5",
     "csrf-tokens": "^2.0.0",

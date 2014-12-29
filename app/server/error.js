@@ -1,5 +1,8 @@
 var config = require("config");
 var http = require('http');
+var path = require("path");
+var cons = require('co-views');
+
 module.exports = error;
 
 function error(opts) {
@@ -45,7 +48,12 @@ function error(opts) {
 
         case 'html':
           var stack = err.stack;
-          yield this.render("error/error", {stack: stack});
+          var frameworkPath = config.get("path.framework");
+
+          var render = cons(frameworkPath + "/app/server/views/", {default: "jade"});
+          this.body = yield render("error", {stack: stack});
+          this.type = 'text/html';
+
           //yield this.render("error/error", {
           //  debug: debugErrors,
           //  ctx: this,
