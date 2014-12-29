@@ -28,7 +28,7 @@ exports.initialize = function* () {
     });
 
     gulp.on('task_err', function (e) {
-      var msg = formatError(e);
+      var msg = e;
       var time = prettyTime(e.hrDuration);
       gutil.log(
         '[assets] \'' + chalk.cyan(e.task) + '\'',
@@ -49,25 +49,41 @@ exports.initialize = function* () {
   }
 };
 
-exports.getModule = function (moduleName) {
+exports.expandModule = function (moduleName) {
   var pathApp = config.get("path.app");
   var m = require(path.join(pathApp, "app", "client", moduleName + ".json"));
 
-  var files = m.components.map(function (m) {
+  var components = m.components.map(function (m) {
     var moduleBase = path.join(pathApp, "app", "client", "components", m);
     var bjson = require(path.join(moduleBase, "bower.json"));
     var main = bjson.main;
     return path.join("components", m, main);
   });
 
-  var jss = glob({cwd: path.join(pathApp, "app", "client", "js")}, m.js);
-  jss = jss.map(function (file) {
+  var js = glob({cwd: path.join(pathApp, "app", "client", "js")}, m.js).map(function (file) {
     return "js/" + file;
   });
-  files = files.concat(jss);
 
   return {
-    js: files,
+    components: components,
+    js: js,
+    style: m.style
+  };
+
+};
+
+exports.getModule = function (moduleName) {
+  var min = config.get("assets.min");
+  var js;
+  if (!min) {
+    var m = exports.expandModule(moduleName);
+    js = m.components.concat(m.js);
+  } else {
+    js = ["js/" + moduleName + ".js"]
+  }
+
+  return {
+    js: js,
     style: "style/" + moduleName + ".css"
   };
 };

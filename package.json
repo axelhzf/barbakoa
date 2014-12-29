@@ -72,14 +72,18 @@
     "gulp-gzip": "0.0.8",
     "gulp-iconfont": "^1.0.0",
     "gulp-iconfont-css": "0.0.9",
+    "gulp-if": "^1.2.5",
     "gulp-image-resize": "^0.5.0",
     "gulp-imagemin": "^2.0.0",
     "gulp-jade": "^0.10.0",
     "gulp-less": "^2.0.1",
+    "gulp-ng-annotate": "^0.4.3",
     "gulp-ng-html2js": "^0.1.8",
     "gulp-ngmin": "^0.3.0",
+    "merge-stream": "^0.1.6",
     "mocha": "^2.0.1",
-    "nodemon": "^1.2.1"
+    "nodemon": "^1.2.1",
+    "streamqueue": "^0.1.1"
   },
   "main": "app/server/server.js",
   "scripts": {

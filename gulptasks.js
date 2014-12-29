@@ -1,4 +1,6 @@
 module.exports = function (gulp) {
+  var path = require("path");
+  var config = require("config");
   var gutil = require('gulp-util');
   var less = require("gulp-less");
   var autoprefixer = require("gulp-autoprefixer");
@@ -7,6 +9,10 @@ module.exports = function (gulp) {
   var jade = require("gulp-jade");
   var ngHtml2Js = require("gulp-ng-html2js");
   var concat = require("gulp-concat");
+  var uglify = require('gulp-uglify');
+  var ngAnnotate = require('gulp-ng-annotate');
+  var gulpif = require("gulp-if");
+  var streamqueue = require('streamqueue');
 
   var base = process.cwd();
 
@@ -22,7 +28,7 @@ module.exports = function (gulp) {
     },
     js: {
       src: base + "/app/client/js",
-      dest: base + "/app/.assets/js"
+      dest: base + "/app/.assets"
     },
     clean: [base + "/app/.assets"]
   };
@@ -49,15 +55,31 @@ module.exports = function (gulp) {
   });
 
   gulp.task('es6', function () {
-    return gulp.src(paths.js.src + "/**.js")
-      .pipe(to5())
+    var min = config.get("assets.min");
+
+    var assets = require("./app/server/assets");
+    var moduleName = "app";
+    var moduleContent = assets.expandModule(moduleName);
+
+    var cwd = base + "/app/client/";
+
+    var js = gulp.src(moduleContent.js, {cwd: cwd, base: cwd})
+      .pipe(to5());
+    var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
+    var merged = streamqueue({ objectMode: true }, components, js);
+
+    return merged
+      .pipe(gulpif(min, concat("js/" + moduleName + ".js")))
+      .pipe(gulpif(min, ngAnnotate()))
+      .pipe(gulpif(min, uglify()))
       .pipe(gulp.dest(paths.js.dest));
   });
 
-  gulp.task('watch', ["build"], function () {
+
+  gulp.task('watch', ["default"], function () {
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
-    gulp.watch([paths.js.src + "**/*.js"], ["es6"]);
+    gulp.watch([paths.js.src + "**/*.js"], ["es6"]); //todo glob components files
   });
 
   gulp.task("build", ["jade", "less", "es6"]);
@@ -67,9 +89,13 @@ module.exports = function (gulp) {
     return del(paths.clean, cb);
   });
 
+  gulp.task("clean", function (cb) {
+    del(['app/.assets/'], cb);
+  });
+
   gulp.task("build", ["jade", "less", "es6"]);
 
   gulp.task("default", ["clean"], function () {
     return gulp.start("build");
   });
-}
+};
