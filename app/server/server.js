@@ -27,6 +27,7 @@ function barbakoa() {
   var appPath = path.join(config.get("path.app"), "app");
 
   var viewPath = path.join(appPath, "server", "views");
+
   app.use(views(viewPath, {
     default: 'jade',
     ext: "jade"
@@ -93,6 +94,8 @@ function barbakoa() {
       }
     });
   }
+
+  barbakoa.mountStatic = mountStatic;
 
   return app;
 
