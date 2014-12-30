@@ -55,16 +55,16 @@ JobsQueue.prototype._tryToExecuteJob = function* () {
         status: "running",
         start_uuid: start_uuid
       }, {
-        where: {status: "waiting"},
+        where: {status: "waiting", name: worker.name},
         limit: 1
       });
 
       if (affectedRows[0]) {
         var job = yield Job.find({where: {start_uuid: start_uuid}});
+        debug("[job %d] start", job.id, job.parameters);
         worker.process(job.parameters).then(function () {
           self._finishJob(job.id, "done");
         }).catch(function (e) {
-          console.log(e.stack);
           self._finishJob(job.id, "error");
         });
       }
