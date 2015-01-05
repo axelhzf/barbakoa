@@ -6,6 +6,7 @@ var Job = db.define("Job", {
     name: Sequelize.STRING,
     status: Sequelize.STRING,
     start_uuid: Sequelize.STRING,
+    stack: Sequelize.TEXT,
     parameters: {
       type: Sequelize.TEXT,
       get: function () {

@@ -68,10 +68,11 @@ function barbakoa() {
       yield events.emit("pre-start");
       yield db.initialize();
       router.configure(app);
-      yield assets.initialize();
+      assets.initialize();
       server = app.listen(config.get("port"));
       yield events.emit("post-start");
     }).catch(function (e) {
+      console.trace("Error", e);
       console.trace("Error", e.stack);
     });
   };

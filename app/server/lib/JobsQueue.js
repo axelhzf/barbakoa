@@ -63,9 +63,9 @@ JobsQueue.prototype._tryToExecuteJob = function* () {
         var job = yield Job.find({where: {start_uuid: start_uuid}});
         debug("[job %d] start", job.id, job.parameters);
         worker.process(job.parameters).then(function () {
-          self._finishJob(job.id, "done");
+          self._finishJob(job.id, {status: "done"});
         }).catch(function (e) {
-          self._finishJob(job.id, "error");
+          self._finishJob(job.id, {status:"error", stack: e.stack});
         });
       }
 
@@ -73,11 +73,11 @@ JobsQueue.prototype._tryToExecuteJob = function* () {
   }
 };
 
-JobsQueue.prototype._finishJob = function (jobId, status) {
+JobsQueue.prototype._finishJob = function (jobId, updatedFields) {
   var self = this;
   return co(function* () {
-    yield Job.update({status: status}, {where: {id: jobId}});
-    debug("[job %d] finished with status %s", jobId, status);
+    yield Job.update(updatedFields, {where: {id: jobId}});
+    debug("[job %d] finished with status %s", jobId, updatedFields.status);
     yield self._tryToExecuteJob();
   });
 };
@@ -85,6 +85,7 @@ JobsQueue.prototype._finishJob = function (jobId, status) {
 JobsQueue.prototype.start = function () {
   var self = this;
   return co(function* () {
+    yield Job.update({status: "waiting"}, {where: {status: "running"}}); //reset al running jobs
     yield self._tryToExecuteJob();
   });
 };

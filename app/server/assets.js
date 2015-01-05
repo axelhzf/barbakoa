@@ -7,7 +7,7 @@ var glob = require("simple-glob");
 var _ = require("underscore");
 var _s = require("underscore.string");
 
-exports.initialize = function* () {
+exports.initialize = function () {
   if (config.get("assets.reload")) {
     var gulp = require("gulp");
     var gulptasks = require("../../gulptasks");
