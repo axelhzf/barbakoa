@@ -39,6 +39,7 @@ function barbakoa() {
     app.use(require("koa-logger")());
   }
 
+  require('koa-qs')(app); //nested query string
   app.use(require("./error")());
   app.use(koaBody());
   app.keys = config.keys;
@@ -64,7 +65,7 @@ function barbakoa() {
   var server;
 
   app.start = function () {
-    co(function * () {
+    return co(function * () {
       yield events.emit("pre-start");
       yield db.initialize();
       router.configure(app);
@@ -78,7 +79,9 @@ function barbakoa() {
   };
 
   app.stop = function () {
-    server.close();
+    return co(function* () {
+      server.close();
+    });
   };
 
   function mountStatic(url, path) {
@@ -107,6 +110,11 @@ barbakoa.router = router;
 barbakoa.db = db;
 barbakoa.assets = assets;
 barbakoa.JobsQueue = require("./lib/JobsQueue");
+
+if (process.env.NODE_ENV === "test") {
+  barbakoa.test = require("../../test/server/test");
+}
+
 
 module.exports = barbakoa;
 

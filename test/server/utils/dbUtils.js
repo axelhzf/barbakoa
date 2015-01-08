@@ -3,6 +3,7 @@ var fs = require("fs");
 var _ = require("underscore");
 var db = require("../../../app/server/db");
 var parallel = require("co-parallel");
+var config = require("config");
 
 exports.dropTables = dropTables;
 exports.createFixtures = createFixtures;
@@ -33,13 +34,20 @@ function* createFixtures (fixtures) {
 }
 
 function getModels () {
-  var modelPath = path.join(__dirname, "../../app/server/models");
+  var models = {};
+  var frameworkModels = getModelsInDirectory(path.join(config.get("path.framework"), "/app/server/models"));
+  var appModels = getModelsInDirectory(path.join(config.get("path.app"), "/app/server/models"));
+  _.extend(models, frameworkModels, appModels);
 
-  var modelFiles = fs.readdirSync(modelPath);
+  return models;
+}
+
+function getModelsInDirectory(directory) {
+  var modelFiles = fs.readdirSync(directory);
   var models = {};
   modelFiles.forEach(function (file) {
     var modelName = path.basename(file, ".js");
-    models[modelName] = require(path.join(modelPath, file));
+    models[modelName] = require(path.join(directory, file));
   });
   return models;
 }

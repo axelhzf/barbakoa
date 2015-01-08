@@ -85,4 +85,11 @@ Tasks:
 * `build`
 * `default`
 
+## Test
+
+Grep
+
+```
+npm test -- --grep pattern
+```
 
