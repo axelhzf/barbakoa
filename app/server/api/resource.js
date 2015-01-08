@@ -1,27 +1,25 @@
 var _ = require("underscore");
+var Joi = require("joi");
+
 module.exports = function (Model, options) {
   options || (options = {});
 
   var resource = {
     list: function* () {
-      var limit = parseInt(this.query.limit, 10) || 5;
-      var offset = parseInt(this.query.offset, 10) || 0;
-      var order = this.query.order;
-
-      var findParams = {
-        limit: limit,
-        offset: offset,
-        order: order,
-        where: this.query.where,
-        attributes: this.query.attributes
-      };
-
+      var query = yield this.validateQuery(Joi.object().keys({
+        limit: Joi.number().integer().min(1),
+        offset: Joi.number().integer().min(0),
+        order: Joi.string(),
+        where: Joi.array(),
+        attributes: Joi.any()
+      }));
+      var findParams = _.defaults(query || {}, {limit: 5, offset: 0});
       var models = yield Model.findAndCountAll(findParams);
       var result = {
-        limit: limit,
-        offset: offset,
+        limit: findParams.limit,
+        offset: findParams.offset,
         total: models.count,
-        order: order,
+        order: findParams.order,
         items: _.map(models.rows, serialize)
       };
 

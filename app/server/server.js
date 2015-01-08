@@ -46,6 +46,31 @@ function barbakoa() {
   app.use(session(app));
   app.use(flash());
 
+  app.use(require("./validations"));
+
+  //validations
+  app.use(function* (next) {
+    var ctx = this;
+    ctx.validateParams = function (schema) {
+      return function (cb) {
+        var params = _.extend({}, ctx.params);
+        var Joi = require("joi");
+        Joi.validate(params, schema, function (err, value) {
+          if (!err) {
+            cb(null, value)
+          } else {
+            err.status = 400;
+            err.expose = true;
+            err.message = err.details.map(function (detail) {
+              return {path: detail.path, message: detail.message}
+            });
+            cb(err);
+          }
+        });
+      };
+    };
+    yield next;
+  });
 
 //locals
   app.use(function *(next) {
@@ -100,6 +125,11 @@ function barbakoa() {
   }
 
   barbakoa.mountStatic = mountStatic;
+
+  app.on("error", function (e) {
+    console.trace(e);
+    console.trace(e.stack);
+  });
 
   return app;
 

@@ -38,11 +38,11 @@ function error(opts) {
 
         case 'json':
           if (debugErrors) {
-            this.body = {error: err.message};
+            this.body = {errors: err.message};
           } else if (err.expose) {
-            this.body = {error: err.message}
+            this.body = {errors: err.message}
           } else {
-            this.body = {error: http.STATUS_CODES[this.status]}
+            this.body = {errors: http.STATUS_CODES[this.status]}
           }
           break;
 
