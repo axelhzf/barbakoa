@@ -110,6 +110,9 @@ barbakoa.router = router;
 barbakoa.db = db;
 barbakoa.assets = assets;
 barbakoa.JobsQueue = require("./lib/JobsQueue");
+barbakoa.api = {
+  resource: require("./api/resource")
+};
 
 if (process.env.NODE_ENV === "test") {
   barbakoa.test = require("../../test/server/test");
