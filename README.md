@@ -42,17 +42,51 @@ module.exports = db.define("User", {
 
 [Supported types](http://sequelizejs.com/docs/latest/models#data-types)
 
+Custom types:
+
+* `db.types.URL` : `db.types.STRING(2000)`
+
 ### Model usage
 
 ```js
 var User = require("./models/User");
+var router = require("barbakoa").router;
+
 router.get("/api/users", function* () {
   var users = yield User.findAll();
   this.body = {users: users};
 });
 ```
 
-### Events
+## Request parsing and validation
+
+```js
+var router = require("barbakoa").router;
+var Joi = require("joi")
+
+var idSchema = Joi.object().keys({
+  id: Joi.number().integer().min(0).required()
+});
+
+router.get("/api/users/:id", function* () {
+  var params = yield this.validateParams(idSchema);
+  this.body = yield User.find(params.id)
+});
+
+```
+
+Methods:
+
+* `ctx.validateParams(schema)` : validates ctx.params
+* `ctx.validateQuery(schema)` : validates ctx.query
+* `ctx.validateBody(schema)` : validates ctx.body
+
+
+## Configuration¡
+
+Barbakoa uses [node-config](https://github.com/lorenwest/node-config)
+
+## Events
 
 ```js
 barbakoa.on("post-start", function* () {
@@ -61,8 +95,9 @@ barbakoa.on("post-start", function* () {
 ```
 
 Events:
-* pre-start
-* post-start
+
+* **pre-start**
+* **post-start**
 
 
 ## Gulp
@@ -83,13 +118,29 @@ Tasks:
 * `es6` : es6to5 transformation
 * `clean`
 * `build`
-* `default`
+* `default` : clean + build
 
 ## Test
+
+```
+npm test
+```
+
+
+#### Server tests
+
+```
+npm run test-server
+```
 
 Grep
 
 ```
-npm test -- --grep pattern
+npm run test-server -- --grep pattern
 ```
 
+#### Client tests
+
+```
+npm run test-client
+```

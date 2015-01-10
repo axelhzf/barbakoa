@@ -145,7 +145,14 @@ barbakoa.api = {
 };
 
 if (process.env.NODE_ENV === "test") {
-  barbakoa.test = require("../../test/server/test");
+  barbakoa.test = {
+    server: {
+      run: require("../../test/server/test")
+    },
+    client: {
+      run: require("../../test/client/clientTestRunner")
+    }
+  };
 }
 
 

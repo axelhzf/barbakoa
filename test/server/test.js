@@ -25,7 +25,6 @@ function* addFiles() {
   });
 }
 
-
 var server;
 
 function run() {
