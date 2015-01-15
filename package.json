@@ -79,9 +79,7 @@
     "thunkify": "^2.1.2",
     "underscore": "^1.7.0",
     "underscore.string": "^2.4.0",
-    "uuid": "^2.0.1"
-  },
-  "devDependencies": {
+    "uuid": "^2.0.1",
     "bower": "^1.3.12",
     "chai": "^1.10.0",
     "co-glob": "0.0.2",
@@ -96,6 +94,8 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^2.0.1",
     "nodemon": "^1.2.1"
+  },
+  "devDependencies": {
   },
   "main": "app/server/server.js",
   "bin": {
