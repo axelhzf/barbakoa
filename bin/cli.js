@@ -9,7 +9,7 @@ program.version(version);
 program.command("dev")
   .description("Run application in dev mode")
   .action(function () {
-    spawn(process.cwd() + "/app/server/server.js", {
+    spawn(__dirname + "/dev.js", {
       NODE_ENV: "development",
       NODE_CONFIG_DIR: "./app/server/config"
     });

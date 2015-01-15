@@ -65,6 +65,7 @@
     "mysql": "~2.5.3",
     "mz": "^1.2.0",
     "ngmin": "^0.5.0",
+    "nodemon": "^1.2.1",
     "passport-facebook": "^1.0.3",
     "pretty-hrtime": "^0.2.2",
     "qs": "^2.3.3",
@@ -96,8 +97,8 @@
     "nodemon": "^1.2.1"
   },
   "main": "app/server/server.js",
-  "bin" : {
-    "barbakoa" : "./bin/cli.js"
+  "bin": {
+    "barbakoa": "./bin/cli.js"
   },
   "scripts": {
     "install": "",
