@@ -127,7 +127,7 @@ Tasks:
 * `build`
 * `default` : clean + build
 
-## Cli
+## CLI
 
 * `barbakoa dev` : Run app in dev mode. Gulp watch and nodemon for server restart
 * `barbakoa test` : Run client and server test
