@@ -120,31 +120,6 @@ Tasks:
 * `build`
 * `default` : clean + build
 
-## Test
-
-```
-npm test
-```
-
-
-#### Server tests
-
-```
-npm run test-server
-```
-
-Grep
-
-```
-npm run test-server -- --grep pattern
-```
-
-#### Client tests
-
-```
-npm run test-client
-```
-
 ## Cli
 
 * `barbakoa dev` : Run app in dev mode. Gulp watch and nodemon for server restart
