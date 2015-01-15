@@ -59,7 +59,6 @@ function testRunner () {
   });
 }
 
-
 var toExport = {
   utils: {
     dbUtils: require("./utils/dbUtils")

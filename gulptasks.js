@@ -65,11 +65,11 @@ module.exports = function (gulp) {
 
     var cwd = base + "/app/client/";
 
-    var js = moduleContent.js.map(function (item) {
+    var jsFiles = moduleContent.js.map(function (item) {
       return "js/" + item;
     });
 
-    var js = gulp.src(js, {cwd: cwd, base: cwd})
+    var js = gulp.src(jsFiles, {cwd: cwd, base: cwd})
       .pipe(cached())
       .pipe(to5())
       .pipe(remember());
@@ -85,9 +85,17 @@ module.exports = function (gulp) {
 
 
   gulp.task('watch', ["default"], function () {
+    var assets = require("./app/server/assets");
+    var moduleName = "app";
+    var moduleContent = assets.expandModule(moduleName);
+
+    var jsFiles = moduleContent.js.map(function (item) {
+      return base + "/app/client/js/" + item;
+    });
+
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
-    gulp.watch([paths.js.src + "**/*.js"], ["es6"]); //todo glob components files
+    gulp.watch(jsFiles, ["es6"]);
   });
 
   gulp.task("build", ["jade", "less", "es6"]);

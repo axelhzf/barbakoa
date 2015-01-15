@@ -56,9 +56,10 @@ function spawn(file, env, cb) {
     env: env
   });
   child.stdout.pipe(process.stdout);
-  child.stderr.pipe(process.stderr)
+  child.stderr.pipe(process.stderr);
   child.on("close", function (code) {
     if (cb) {
+      console.log(cb);
       cb();
     }
   });

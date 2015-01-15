@@ -147,6 +147,9 @@ barbakoa.api = {
 if (process.env.NODE_ENV === "test") {
   barbakoa.test = {
     server: {
+      utils: {
+        dbUtils: require("../../test/server/utils/dbUtils")
+      },
       run: require("../../test/server/test")
     },
     client: {
