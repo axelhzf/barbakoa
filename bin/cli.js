@@ -31,6 +31,12 @@ program.command("test-server")
   .description("Run server side tests")
   .action(testServer);
 
+program.command("init")
+  .description("Run server side tests")
+  .action(function () {
+    spawn(__dirname + "/init.js", {});
+  });
+
 function testServer (cb) {
   spawn(__dirname + "/test-server.js", {
     NODE_ENV: "test",

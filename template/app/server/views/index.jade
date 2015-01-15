@@ -1,0 +1,15 @@
+extends layout
+
+block head
+  link(rel="stylesheet", href="/assets/" + assets.style)
+
+block content
+  h1 Barbakoa app
+
+  div(ng-app="app")
+    ng-view
+
+  if assets.js
+    each script in assets.js
+      script(src="assets/" + script)
+    script(src="assets/templates/templates.js")
