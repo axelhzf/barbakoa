@@ -144,3 +144,10 @@ npm run test-server -- --grep pattern
 ```
 npm run test-client
 ```
+
+## Cli
+
+* `barbakoa dev` : Run app in dev mode. Gulp watch and nodemon for server restart
+* `barbakoa test` : Run client and server test
+* `barbakoa test-client`
+* `barbakoa test-server`

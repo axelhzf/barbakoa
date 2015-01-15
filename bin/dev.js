@@ -1,4 +1,5 @@
 #!/usr/bin/env node --harmony
+var assets = require("../app/server/assets");
 
 var program = require("commander");
 var version = require("./../package.json").version;
@@ -6,7 +7,6 @@ var version = require("./../package.json").version;
 program
   .version(version)
   .parse(process.argv);
-
 
 var nodemon = require("nodemon");
 
@@ -25,3 +25,6 @@ nodemon.on('start', function () {
 }).on('restart', function (files) {
   console.log('Restarting app: ', files);
 });
+
+
+assets.initialize();
