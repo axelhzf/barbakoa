@@ -1,13 +1,13 @@
 var path = require("path");
 
 module.exports = {
-  name: "",
+  name: "barbakoa-app",
   port: process.env.PORT || 3000,
   keys: ['some secret hurr'],
   db: {
-    username: "admin",
+    username: "root",
     password: "",
-    database: "",
+    database: "barbakoa-app",
     sync: true,
     forceSync: false
   },

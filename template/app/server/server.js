@@ -4,7 +4,8 @@ var router = barbakoa.router;
 var app = new barbakoa();
 
 router.get("/", function* () {
-  yield this.render("index");
+  var assets = barbakoa.assets.getModule("app");
+  yield this.render("index", {assets: assets});
 });
 
 app.start();
