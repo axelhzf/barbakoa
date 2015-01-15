@@ -4,7 +4,7 @@ var Sequelize = require("sequelize");
 var config = require("config");
 var debug = require("debug")("sql");
 var fs = require("mz/fs");
-
+var log = require("./logger").child({component: "db"});
 
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
   logging: debug
@@ -29,7 +29,7 @@ function* syncModels() {
     allModels = allModels.concat(models);
   }
 
-  console.log("Syncing models ", allModels);
+  log.debug({models: allModels}, "Syncing models");
 
   var syncOptions = {
     force: config.get("db.forceSync")

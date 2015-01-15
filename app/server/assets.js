@@ -1,12 +1,12 @@
 var path = require("path");
 var config = require("config");
-var gutil = require("gulp-util");
 var chalk = require("chalk");
 chalk.enabled = true;
 var prettyTime = require('pretty-hrtime');
 var glob = require("simple-glob");
 var _ = require("underscore");
 var _s = require("underscore.string");
+var log = require("./logger").child({component: "assets"});
 
 exports.initialize = function () {
   if (config.get("assets.reload")) {
@@ -15,36 +15,27 @@ exports.initialize = function () {
     gulptasks(gulp);
 
     gulp.on('err', function () {
-      gutil.log("[assets] error");
+      log.error("[assets] error");
     });
 
     gulp.on('task_start', function (e) {
-      gutil.log('[assets] starting', '\'' + chalk.cyan(e.task) + '\'...');
+      log.debug({task: e.task}, 'start task');
     });
 
     gulp.on('task_stop', function (e) {
       var time = prettyTime(e.hrDuration);
-      gutil.log(
-        '[assets] finished', '\'' + chalk.cyan(e.task) + '\'',
-        'after', chalk.magenta(time)
-      );
+      log.debug({task: e.task, etime: time}, "end task");
     });
 
     gulp.on('task_err', function (e) {
       var msg = e;
       var time = prettyTime(e.hrDuration);
-      gutil.log(
-        '[assets] \'' + chalk.cyan(e.task) + '\'',
-        chalk.red('errored after'),
-        chalk.magenta(time)
-      );
+      log.debug({task: e.task, etime: time}, "task error");
       gutil.log(msg);
     });
 
     gulp.on('task_not_found', function (err) {
-      gutil.log(
-        chalk.red('[assets] task \'' + err.task + '\' is not in your gulpfile')
-      );
+      log.debug({task: e.task}, "task is not in your gulpfile");
     });
 
     gulp.start("watch");

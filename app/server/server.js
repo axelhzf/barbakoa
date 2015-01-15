@@ -20,6 +20,8 @@ var path = require("path");
 var assets = require("./assets");
 var events = require("./events");
 
+var log = require("./logger").child({component: "server"});
+
 function barbakoa() {
 
   var app = koa();
@@ -97,8 +99,8 @@ function barbakoa() {
       server = app.listen(config.get("port"));
       yield events.emit("post-start");
     }).catch(function (e) {
-      console.trace("Error", e);
-      console.trace("Error", e.stack);
+      log.error("Error", e);
+      log.error("Error", e.stack);
     });
   };
 
@@ -113,12 +115,12 @@ function barbakoa() {
     co(function* () {
       var exists = yield fs.exists(path);
       if (exists) {
-        console.log("mounting %s to %s", path, url);
+        log.debug("mounting %s to %s", path, url);
         var assets = koa();
         assets.use(staticLib(path));
         app.use(mount(url, assets));
       } else {
-        console.log("path %s doesn't exists", path);
+        log.error("path %s doesn't exists", path);
       }
     });
   }
@@ -142,6 +144,7 @@ barbakoa.JobsQueue = require("./lib/JobsQueue");
 barbakoa.api = {
   resource: require("./api/resource")
 };
+barbakoa.logger = logger;
 
 if (process.env.NODE_ENV === "test") {
   barbakoa.test = {

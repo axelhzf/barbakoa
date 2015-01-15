@@ -3,14 +3,25 @@ var path = require("path");
 var bunyan = require("bunyan");
 var config = require("config");
 var mkdirp = require("mkdirp");
+var PrettyStream = require('bunyan-prettystream');
+
 
 var logFilename = path.normalize(config.get("logs.path") + "/" + config.get("name") + ".log");
 mkdirp(path.normalize(config.get("logs.path")));
 
+var prettyStdOut = new PrettyStream({
+  mode: 'dev'
+});
+prettyStdOut.pipe(process.stdout);
+
 var log = bunyan.createLogger({
   name: config.name,
   streams: [
-    {level: 'info', stream: process.stdout},
+    {
+      level: 'debug',
+      type: 'raw',
+      stream: prettyStdOut
+    },
     {level: 'info', path: logFilename}
   ]
 });

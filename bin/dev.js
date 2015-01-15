@@ -1,5 +1,6 @@
 #!/usr/bin/env node --harmony
 var assets = require("../app/server/assets");
+var log = require("../app/server/logger").child({component: "cli"});
 
 var program = require("commander");
 var version = require("./../package.json").version;
@@ -19,11 +20,11 @@ nodemon({
 });
 
 nodemon.on('start', function () {
-  console.log('Starting app in dev mode');
+  log.debug("Starting app in dev mode");
 }).on('quit', function () {
-  console.log('App has quit');
+  log.fatal("App has quit");
 }).on('restart', function (files) {
-  console.log('Restarting app: ', files);
+  log.warn({files: files}, "Restarting app");
 });
 
 
