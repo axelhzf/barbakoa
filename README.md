@@ -4,6 +4,13 @@ Fullstack framework based on [Koa](http://koajs.com/)
 
 See [axelhzf/barbakoa-base-app](https://github.com/axelhzf/barbakoa-base-app) for usage example.
 
+## Instalation
+
+```js
+npm install barbakoa --save
+barbakoa init
+```
+
 ## Create an application
 
 ```js
