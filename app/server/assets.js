@@ -2,6 +2,7 @@ var path = require("path");
 var config = require("config");
 var gutil = require("gulp-util");
 var chalk = require("chalk");
+chalk.enabled = true;
 var prettyTime = require('pretty-hrtime');
 var glob = require("simple-glob");
 var _ = require("underscore");
