@@ -16,6 +16,7 @@ prettyStdOut.pipe(process.stdout);
 
 var log = bunyan.createLogger({
   name: config.name,
+  src: true,
   streams: [
     {
       level: 'debug',
