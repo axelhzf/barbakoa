@@ -38,7 +38,8 @@ function barbakoa() {
   mountStatic("/assets", path.join(appPath, '.assets'));
 
   if (config.get("logs.request")) {
-    app.use(require("koa-logger")());
+    var requestLogger = log.child({component: "request"});
+    app.use(require("koa-bunyan")(requestLogger, {level: "debug", timeLimit: 100}));
   }
 
   require('koa-qs')(app); //nested query string
@@ -62,6 +63,8 @@ function barbakoa() {
     };
     yield *next;
   });
+
+
 
 
 // server methods
