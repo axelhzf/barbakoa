@@ -8,4 +8,8 @@ router.get("/", function* () {
   yield this.render("index", {assets: assets});
 });
 
-app.start();
+module.exports = app;
+
+if (require.main === module) {
+  app.start();
+}
