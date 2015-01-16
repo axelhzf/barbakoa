@@ -31,7 +31,6 @@ exports.initialize = function () {
       var msg = e;
       var time = prettyTime(e.hrDuration);
       log.debug({task: e.task, etime: time}, "task error");
-      gutil.log(msg);
     });
 
     gulp.on('task_not_found', function (err) {
