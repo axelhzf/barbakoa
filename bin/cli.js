@@ -28,6 +28,7 @@ program.command("test-client")
   .action(testClient);
 
 program.command("test-server")
+  .option('-g, --grep [filter]', "Grep")
   .description("Run server side tests")
   .action(testServer);
 
@@ -57,7 +58,13 @@ function spawn(file, env, cb) {
   var spawn = require("child_process").spawn;
   var cwd = process.cwd();
   var env = _.extend({}, process.env, env);
-  var child = spawn(process.execPath, ["--harmony", file], {
+  var args = ["--harmony", file];
+  if(program.grep) {
+    args.push("grep");
+    args.push(program.grep);
+  }
+  args = args.concat(process.argv.slice(3));
+  var child = spawn(process.execPath, args, {
     cwd: cwd,
     env: env
   });
