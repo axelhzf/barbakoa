@@ -50,30 +50,6 @@ function barbakoa() {
 
   app.use(require("./validations"));
 
-  //validations
-  app.use(function* (next) {
-    var ctx = this;
-    ctx.validateParams = function (schema) {
-      return function (cb) {
-        var params = _.extend({}, ctx.params);
-        var Joi = require("joi");
-        Joi.validate(params, schema, function (err, value) {
-          if (!err) {
-            cb(null, value)
-          } else {
-            err.status = 400;
-            err.expose = true;
-            err.message = err.details.map(function (detail) {
-              return {path: detail.path, message: detail.message}
-            });
-            cb(err);
-          }
-        });
-      };
-    };
-    yield next;
-  });
-
 //locals
   app.use(function *(next) {
     this.locals = {
