@@ -28,6 +28,6 @@ module.exports = {
   },
   path: {
     app: path.join(process.cwd()),
-    framework: __dirname
+    framework: path.join(process.cwd(), "node_modules", "barbakoa")
   }
 };
