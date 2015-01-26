@@ -36,6 +36,10 @@ module.exports = function (gulp) {
     fonts: {
       src: base + "/app/client/fonts/**/*",
       dest: base + "/app/.assets/fonts"
+    },
+    images: {
+      src: base + "/app/client/images/**/*",
+      dest: base + "/app/.assets/images"
     }
   };
 
@@ -101,6 +105,7 @@ module.exports = function (gulp) {
     gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
     gulp.watch(jsFiles, ["es6"]);
     gulp.watch(paths.fonts.src, ["fonts"]);
+    gulp.watch(paths.images.src, ["images"]);
   });
 
   gulp.task("fonts", function () {
@@ -108,7 +113,12 @@ module.exports = function (gulp) {
       .pipe(gulp.dest(paths.fonts.dest));
   });
 
-  gulp.task("build", ["jade", "less", "es6", "fonts"]);
+  gulp.task("images", function () {
+    return gulp.src(paths.images.src)
+      .pipe(gulp.dest(paths.images.dest));
+  });
+
+  gulp.task("build", ["jade", "less", "es6", "fonts", "images"]);
 
   gulp.task('clean', function (cb) {
     return del(paths.clean, cb);
