@@ -9,7 +9,9 @@ GLOBAL.expect = require("chai").expect;
 
 program
   .version(require('../../package.json').version)
-  .option('-g, --grep [filter]', "Grep");
+  .option('-g, --grep [filter]', "Grep")
+  .option('-c, --coverage', "Coverage");
+
 program.parse(process.argv);
 
 var mocha = new Mocha({

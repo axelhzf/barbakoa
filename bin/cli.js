@@ -29,6 +29,7 @@ program.command("test-client")
 
 program.command("test-server")
   .option('-g, --grep [filter]', "Grep")
+  .option('-c, --coverage', "Coverage")
   .description("Run server side tests")
   .action(testServer);
 
@@ -38,11 +39,33 @@ program.command("init")
     spawn(__dirname + "/init.js", {});
   });
 
-function testServer (cb) {
-  spawn(__dirname + "/test-server.js", {
-    NODE_ENV: "test",
-    NODE_CONFIG_DIR: "./app/server/config"
-  }, cb);
+function testServer (options, cb) {
+  var spawn = require("child_process").spawn;
+
+  if (options.coverage) {
+    var cwd = process.cwd();
+    var env = _.extend({}, process.env, {
+      NODE_ENV: "test",
+      NODE_CONFIG_DIR: "./app/server/config"
+    });
+    var args = ["--harmony", __dirname + "/../node_modules/.bin/istanbul", "cover", __dirname + "/test-server.js"];
+    var child = spawn(process.execPath, args, {
+      cwd: cwd,
+      env: env
+    });
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+    child.on("close", function (code) {
+      if (_.isFunction(cb)) {
+        cb();
+      }
+    });
+  } else {
+    spawn(__dirname + "/test-server.js", {
+      NODE_ENV: "test",
+      NODE_CONFIG_DIR: "./app/server/config"
+    }, cb);
+  }
 }
 
 function testClient (cb) {
