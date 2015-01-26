@@ -32,7 +32,11 @@ module.exports = function (gulp) {
       src: base + "/app/client/js",
       dest: base + "/app/.assets"
     },
-    clean: [base + "/app/.assets"]
+    clean: [base + "/app/.assets"],
+    fonts: {
+      src: base + "/app/client/fonts/**/*",
+      dest: base + "/app/.assets/fonts"
+    }
   };
 
   gulp.task("less", function () {
@@ -74,7 +78,7 @@ module.exports = function (gulp) {
       .pipe(to5())
       .pipe(remember());
     var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
-    var merged = streamqueue({ objectMode: true }, components, js);
+    var merged = streamqueue({objectMode: true}, components, js);
 
     return merged
       .pipe(gulpif(min, concat("js/" + moduleName + ".js")))
@@ -96,22 +100,24 @@ module.exports = function (gulp) {
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
     gulp.watch(jsFiles, ["es6"]);
+    gulp.watch(paths.fonts.src, ["fonts"]);
   });
 
-  gulp.task("build", ["jade", "less", "es6"]);
-  gulp.task("default", ["build"]);
+  gulp.task("fonts", function () {
+    return gulp.src(paths.fonts.src)
+      .pipe(gulp.dest(paths.fonts.dest));
+  });
+
+  gulp.task("build", ["jade", "less", "es6", "fonts"]);
 
   gulp.task('clean', function (cb) {
     return del(paths.clean, cb);
   });
 
-  gulp.task("clean", function (cb) {
-    del(['app/.assets/'], cb);
-  });
-
-  gulp.task("build", ["jade", "less", "es6"]);
 
   gulp.task("default", ["clean"], function () {
     return gulp.start("build");
   });
+
+
 };
