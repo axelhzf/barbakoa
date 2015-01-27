@@ -15,6 +15,8 @@ module.exports = function (gulp) {
   var streamqueue = require('streamqueue');
   var cached = require("gulp-cached");
   var remember = require("gulp-remember");
+  var iconfont = require("gulp-iconfont");
+  var consolidate = require("gulp-consolidate");
 
   var base = process.cwd();
 
@@ -116,6 +118,32 @@ module.exports = function (gulp) {
   gulp.task("images", function () {
     return gulp.src(paths.images.src)
       .pipe(gulp.dest(paths.images.dest));
+  });
+
+  gulp.task("generate-icons", function () {
+    console.log("generate icons", base + '/app/client/icons/*.svg');
+    console.log("generate icons", __dirname + '/app/client/icons/icons.less');
+    console.log("generate icons", base + 'app/client/style');
+    console.log("fonts", base + 'app/assets/fonts');
+
+    return gulp.src([base + '/app/client/icons/*.svg'])
+      .pipe(iconfont({fontName: 'icons'}))
+      .on('codepoints', function (codepoints, options) {
+        gulp.src(__dirname + '/app/client/icons/icons.less')
+          .pipe(consolidate('underscore', {
+            glyphs: codepoints,
+            fontName: 'icons',
+            fontPath: '../fonts/',
+            className: 's'
+          }))
+          .on("error", gutil.log)
+          .pipe(gulp.dest(base + '/app/client/style'));
+      })
+      .pipe(gulp.dest(base + '/app/client/fonts'));
+  });
+
+  gulp.task("icons", ["generate-icons"], function () {
+    return gulp.start("less", "fonts");
   });
 
   gulp.task("build", ["jade", "less", "es6", "fonts", "images"]);

@@ -53,6 +53,7 @@
     "gulp-remember": "^0.3.0",
     "gulp-uglify": "^1.0.2",
     "gulp-util": "^3.0.1",
+    "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony",
     "jade": "^1.8.1",
     "joi": "^5.1.0",
     "karma": "^0.12.31",
@@ -93,8 +94,7 @@
     "thunkify": "^2.1.2",
     "underscore": "^1.7.0",
     "underscore.string": "^2.4.0",
-    "uuid": "^2.0.1",
-    "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony"
+    "uuid": "^2.0.1"
   },
   "devDependencies": {},
   "main": "app/server/server.js",
