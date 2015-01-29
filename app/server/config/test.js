@@ -1,6 +1,6 @@
 var path = require("path");
 
-module.exports = {
+export default {
   db: {
     database: "barbakoa-test",
     forceSync: true

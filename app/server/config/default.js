@@ -1,6 +1,6 @@
 var path = require("path");
 
-module.exports = {
+export default {
   name: "koa-base-app",
   port: process.env.PORT || 3000,
   keys: ['some secret hurr'],

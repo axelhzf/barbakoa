@@ -93,7 +93,6 @@ module.exports = function (gulp) {
       .pipe(gulp.dest(paths.js.dest));
   });
 
-
   gulp.task('watch', ["default"], function () {
     var assets = require("./app/server/assets");
     var moduleName = "app";
@@ -152,6 +151,19 @@ module.exports = function (gulp) {
     return del(paths.clean, cb);
   });
 
+  gulp.task("framework", function () {
+    gulp.src("app/server/**/*.js")
+      .pipe(cached('to5'))
+      .pipe(to5({
+        blacklist: [
+          "regenerator"
+        ]
+      }))
+      .on("error", function (e) {
+        console.error(e.message);
+      })
+      .pipe(gulp.dest("app/.server"));
+  });
 
   gulp.task("default", ["clean"], function () {
     return gulp.start("build");
