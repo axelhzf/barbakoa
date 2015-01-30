@@ -17,7 +17,8 @@ module.exports = function (gulp) {
   var remember = require("gulp-remember");
   var iconfont = require("gulp-iconfont");
   var consolidate = require("gulp-consolidate");
-
+  var sourcemaps = require('gulp-sourcemaps');
+  
   var base = process.cwd();
 
   var paths = {
@@ -154,6 +155,7 @@ module.exports = function (gulp) {
   gulp.task("framework", function () {
     gulp.src("app/server/**/*.js")
       .pipe(cached('to5'))
+      .pipe(sourcemaps.init())
       .pipe(to5({
         blacklist: [
           "regenerator"
@@ -162,6 +164,7 @@ module.exports = function (gulp) {
       .on("error", function (e) {
         console.error(e.message);
       })
+      .pipe(sourcemaps.write(".", {sourceRoot: '../server'}))
       .pipe(gulp.dest("app/.server"));
   });
 
