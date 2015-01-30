@@ -7,6 +7,7 @@ var glob = require("simple-glob");
 var _ = require("underscore");
 var _s = require("underscore.string");
 var log = require("./logger").child({component: "assets"});
+var Promise = require("bluebird");
 
 exports.initialize = function () {
   if (config.get("assets.reload")) {
@@ -14,8 +15,8 @@ exports.initialize = function () {
     var gulptasks = require("../../gulptasks");
     gulptasks(gulp);
 
-    gulp.on('err', function () {
-      log.error("[assets] error");
+    gulp.on('err', function (e) {
+      log.error("[assets] error", e);
     });
 
     gulp.on('task_start', function (e) {
@@ -37,7 +38,12 @@ exports.initialize = function () {
       log.debug({task: e.task}, "task is not in your gulpfile");
     });
 
-    gulp.start("watch");
+    return new Promise(function (resolve, reject) {
+      gulp.start("watch", function (e) {
+        if (e) return reject(e);
+        resolve();
+      });
+    });
 
   }
 };

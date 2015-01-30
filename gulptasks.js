@@ -108,7 +108,10 @@ module.exports = function (gulp) {
     gulp.watch(jsFiles, ["es6"]);
     gulp.watch(paths.fonts.src, ["fonts"]);
     gulp.watch(paths.images.src, ["images"]);
+    
     gulp.watch(base + "/server/**/*.js", ["es6-app"]);
+    var frameworkPath = config.get("path.framework");
+    gulp.watch(frameworkPath + "/server/**/*.js", ["es6-framework"]);
   });
 
   gulp.task("fonts", function () {
@@ -147,7 +150,7 @@ module.exports = function (gulp) {
     return gulp.start("less", "fonts");
   });
 
-  gulp.task("build", ["es6-app", "jade", "less", "es6", "fonts", "images"]);
+  gulp.task("build", ["es6-app", "es6-framework", "jade", "less", "es6", "fonts", "images"]);
 
   gulp.task('clean', function (cb) {
     return del(paths.clean, cb);
@@ -169,8 +172,9 @@ module.exports = function (gulp) {
       .pipe(gulp.dest("app/.server"));
   });
 
-  gulp.task("es6-app", function () {
-    gulp.src(base + "/app/server/**/*.js")
+  gulp.task("es6-framework", function () {
+    var frameworkPath = config.get("path.framework");
+    gulp.src(frameworkPath + "/app/server/**/*.js")
       .pipe(cached('to5'))
       .pipe(sourcemaps.init())
       .pipe(to5({
@@ -181,8 +185,8 @@ module.exports = function (gulp) {
       .on("error", function (e) {
         console.error(e.message);
       })
-      .pipe(sourcemaps.write(".", {sourceRoot: base + '/../server'}))
-      .pipe(gulp.dest(base + "/app/.server"));
+      .pipe(sourcemaps.write(".", {sourceRoot: frameworkPath + '/../server'}))
+      .pipe(gulp.dest(frameworkPath + "/app/.server"));
   });
 
   gulp.task("default", ["clean"], function () {
