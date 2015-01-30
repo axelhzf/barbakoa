@@ -12,8 +12,8 @@ program
 var nodemon = require("nodemon");
 
 nodemon({
-  script: "app/server/server.js",
-  watch : ["app/server"],
+  script: "app/.server/server.js",
+  watch: ["app/.server"],
   "execMap": {
     "js": "node --harmony"
   }

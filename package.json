@@ -91,6 +91,7 @@
     "save-to": "^1.0.3",
     "sequelize": "^2.0.0-rc3",
     "simple-glob": "^0.1.0",
+    "source-map-support": "^0.2.9",
     "streamqueue": "^0.1.1",
     "thunkify": "^2.1.2",
     "underscore": "^1.7.0",

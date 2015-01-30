@@ -18,7 +18,7 @@ module.exports = function (gulp) {
   var iconfont = require("gulp-iconfont");
   var consolidate = require("gulp-consolidate");
   var sourcemaps = require('gulp-sourcemaps');
-  
+
   var base = process.cwd();
 
   var paths = {
@@ -108,6 +108,7 @@ module.exports = function (gulp) {
     gulp.watch(jsFiles, ["es6"]);
     gulp.watch(paths.fonts.src, ["fonts"]);
     gulp.watch(paths.images.src, ["images"]);
+    gulp.watch(base + "/server/**/*.js", ["es6-app"]);
   });
 
   gulp.task("fonts", function () {
@@ -146,13 +147,13 @@ module.exports = function (gulp) {
     return gulp.start("less", "fonts");
   });
 
-  gulp.task("build", ["jade", "less", "es6", "fonts", "images"]);
+  gulp.task("build", ["es6-app", "jade", "less", "es6", "fonts", "images"]);
 
   gulp.task('clean', function (cb) {
     return del(paths.clean, cb);
   });
 
-  gulp.task("framework", function () {
+  gulp.task("es6-app", function () {
     gulp.src("app/server/**/*.js")
       .pipe(cached('to5'))
       .pipe(sourcemaps.init())
@@ -166,6 +167,22 @@ module.exports = function (gulp) {
       })
       .pipe(sourcemaps.write(".", {sourceRoot: '../server'}))
       .pipe(gulp.dest("app/.server"));
+  });
+
+  gulp.task("es6-app", function () {
+    gulp.src(base + "/app/server/**/*.js")
+      .pipe(cached('to5'))
+      .pipe(sourcemaps.init())
+      .pipe(to5({
+        blacklist: [
+          "regenerator"
+        ]
+      }))
+      .on("error", function (e) {
+        console.error(e.message);
+      })
+      .pipe(sourcemaps.write(".", {sourceRoot: base + '/../server'}))
+      .pipe(gulp.dest(base + "/app/.server"));
   });
 
   gulp.task("default", ["clean"], function () {

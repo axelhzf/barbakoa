@@ -5,6 +5,8 @@ var config = require("config");
 var debug = require("debug")("sql");
 var fs = require("mz/fs");
 var log = require("./logger").child({component: "db"});
+var glob = require("co-glob");
+
 
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
   logging: debug
@@ -18,7 +20,7 @@ db.initialize = function* () {
 
 function* syncModels() {
   var paths = [
-    path.join(process.cwd(), "app", "server", "models"),
+    path.join(process.cwd(), "app", ".server", "models"),
     path.join(__dirname, "models")
   ];
 
@@ -38,11 +40,12 @@ function* syncModels() {
 }
 
 function* requireModelsAtPath(modelPath) {
-  var modelFiles = yield fs.readdir(modelPath);
-  modelFiles.forEach(function (file) {
-    require(path.join(modelPath, file));
+  var modelFiles = yield glob(path.join(modelPath, "**/*.js"));
+  var models = modelFiles.map(function (file) {
+    require(file);
+    return path.basename(file);
   });
-  return modelFiles;
+  return models;
 }
 
 var transaction = db.transaction.bind(db);

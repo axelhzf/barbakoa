@@ -1,3 +1,5 @@
+import sourceMapSupport from "source-map-support";
+
 var koa = require("koa");
 
 var _ = require("underscore");
@@ -8,8 +10,6 @@ var views = require("koa-views");
 var mount = require("koa-mount");
 var session = require('koa-session');
 var flash = require("koa-flash");
-var staticCache = require('koa-static-cache');
-var static = require("koa-static");
 var fs = require("mz/fs");
 var config = require("config");
 var logger = require("./logger");
