@@ -1,6 +1,8 @@
 var koa = require("koa");
 
 var _ = require("underscore");
+_.mixin(require('safe-obj'));
+
 var co = require("co");
 
 var koaBody = require("koa-body");
