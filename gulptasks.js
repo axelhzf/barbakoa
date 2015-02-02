@@ -48,15 +48,16 @@ module.exports = function (gulp) {
   gulp.task("less", function () {
     gulp.src(paths.less.src + "/app.less")
       .pipe(less({
-        //paths: ["node_modules"] //change to bower components?
+        paths: [base + "/app/client/components/"]
       }))
+      .on("error", gutil.log)
       .pipe(autoprefixer())
       .on("error", gutil.log)
       .pipe(gulp.dest(paths.less.dest));
   });
 
   gulp.task("jade", function () {
-    gulp.src(paths.jade.src + "/*.jade")
+    gulp.src(paths.jade.src + "/**/*.jade")
       .pipe(jade())
       .pipe(ngHtml2Js({
         moduleName: "app",
@@ -104,7 +105,7 @@ module.exports = function (gulp) {
     });
 
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
-    gulp.watch([paths.jade.src + "/*.jade"], ["jade"]);
+    gulp.watch([paths.jade.src + "/**/*.jade"], ["jade"]);
     gulp.watch(jsFiles, ["es6"]);
     gulp.watch(paths.fonts.src, ["fonts"]);
     gulp.watch(paths.images.src, ["images"]);
