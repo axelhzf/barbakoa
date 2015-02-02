@@ -83,6 +83,9 @@ module.exports = function (gulp) {
     var js = gulp.src(jsFiles, {cwd: cwd, base: cwd})
       .pipe(cached())
       .pipe(to5())
+      .on("error", function (e) {
+        console.log(e.message);
+      })
       .pipe(remember());
     var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
     var merged = streamqueue({objectMode: true}, components, js);
