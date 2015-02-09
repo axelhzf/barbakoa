@@ -18,7 +18,7 @@ function validate(value, schema) {
   }
 }
 
-function* middleware (next) {
+function* middleware(next) {
   var ctx = this;
   ctx.validateParams = function* (schema) {
     var params = _.extend({}, ctx.params);
@@ -27,6 +27,10 @@ function* middleware (next) {
   ctx.validateQuery = function* (schema) {
     var query = ctx.query;
     return yield validate(query, schema);
+  };
+  ctx.validateBody = function* (schema) {
+    var body = ctx.request.body;
+    return yield validate(body, schema);
   };
   yield next;
 }
