@@ -46,7 +46,7 @@ function barbakoa() {
 
   require('koa-qs')(app); //nested query string
   app.use(require("./error")());
-  app.use(koaBody());
+  app.use(koaBody({multipart: true, formidable: {uploadDir: config.get("uploads.path")}}));
   app.keys = config.keys;
   app.use(session(app));
   app.use(flash());
@@ -65,8 +65,6 @@ function barbakoa() {
     };
     yield *next;
   });
-
-
 
 
 // server methods
@@ -92,7 +90,7 @@ function barbakoa() {
   };
 
   function mountStatic(url, path) {
-    var staticLib = config.get("assets.cache") ? require("koa-static-cache"): require("koa-static");
+    var staticLib = config.get("assets.cache") ? require("koa-static-cache") : require("koa-static");
     co(function* () {
       var exists = yield fs.exists(path);
       if (exists) {
