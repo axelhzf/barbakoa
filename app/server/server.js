@@ -21,8 +21,9 @@ var cron = require("./cron");
 var path = require("path");
 var assets = require("./assets");
 var events = require("./events");
-
 var log = require("./logger").child({component: "server"});
+var migrations = require("./migrations");
+
 
 function barbakoa() {
 
@@ -74,6 +75,7 @@ function barbakoa() {
     return co(function * () {
       yield events.emit("pre-start");
       yield db.initialize();
+      yield migrations.execute();
       router.configure(app);
       server = app.listen(config.get("port"));
       yield events.emit("post-start");
@@ -124,6 +126,7 @@ barbakoa.api = {
   resource: require("./api/resource")
 };
 barbakoa.logger = logger;
+barbakoa.migrations = require("./migrations");
 
 if (process.env.NODE_ENV === "test") {
   barbakoa.test = {
