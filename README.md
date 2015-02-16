@@ -65,6 +65,26 @@ router.get("/api/users", function* () {
 });
 ```
 
+### Migrations
+
+Write your migrations in `migrations` folder
+
+```js
+module.exports = {
+  up: function* (migration, types) {
+    yield migration.addIndex(
+        'Votes', 
+        ['UserId', 'SelfieId', "daysFromStart"], 
+        { indicesType: 'UNIQUE' }
+    );
+  },
+  down: function () {
+
+  }
+};
+```
+
+
 ## Request parsing and validation
 
 ```js
