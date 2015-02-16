@@ -59,6 +59,7 @@ module.exports = function (gulp) {
   gulp.task("jade", function () {
     gulp.src(paths.jade.src + "/**/*.jade")
       .pipe(jade())
+      .on("error", gutil.log)
       .pipe(ngHtml2Js({
         moduleName: "app",
         prefix: "templates/"
