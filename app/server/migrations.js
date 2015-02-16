@@ -1,6 +1,7 @@
 var Umzug = require('umzug');
 var db = require("./db");
 var config = require("config");
+var co = require("co");
 
 exports.execute = function () {
   console.log("executing migrations");
@@ -16,10 +17,16 @@ exports.execute = function () {
     upName: 'up',
     downName: 'down',
     migrations: {
-      params: [ db.getQueryInterface(), db.types],
+      params: [db.getQueryInterface(), db.types],
       path: config.get("path.app") + '/migrations',
       pattern: /^\d+[\w-]+\.js$/,
-      wrap: function (fun) { return fun; }
+      wrap: function (fun) {
+        return function (migration, types) {
+          return co(function* () {
+            yield fun(migration, types);
+          });
+        };
+      }
     }
   });
   
