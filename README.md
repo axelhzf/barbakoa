@@ -47,11 +47,40 @@ module.exports = db.define("User", {
 });
 ```
 
-[Supported types](http://sequelizejs.com/docs/latest/models#data-types)
+[Sequelize types](http://sequelizejs.com/docs/latest/models#data-types):
+
+```js
+db.types.STRING                      // VARCHAR(255)
+db.types.STRING(1234)                // VARCHAR(1234)
+db.types.STRING.BINARY               // VARCHAR BINARY
+db.types.TEXT                        // TEXT
+ 
+db.types.INTEGER                     // INTEGER
+db.types.BIGINT                      // BIGINT
+db.types.BIGINT(11)                  // BIGINT(11)
+db.types.FLOAT                       // FLOAT
+db.types.FLOAT(11)                   // FLOAT(11)
+db.types.FLOAT(11, 12)               // FLOAT(11,12)
+ 
+db.types.DECIMAL                     // DECIMAL
+db.types.DECIMAL(10, 2)              // DECIMAL(10,2)
+ 
+db.types.DATE                        // DATETIME for mysql / sqlite, TIMESTAMP WITH TIME ZONE for postgres
+db.types.BOOLEAN                     // TINYINT(1)
+ 
+db.types.ENUM('value 1', 'value 2')  // An ENUM with allowed values 'value 1' and 'value 2'
+db.types.ARRAY(Sequelize.TEXT)       // Defines an array. PostgreSQL only.
+ 
+db.types.BLOB                        // BLOB (bytea for PostgreSQL)
+db.types.BLOB('tiny')                // TINYBLOB (bytea for PostgreSQL. Other options are medium and long)
+db.types.UUID    
+```
 
 Custom types:
 
-* `db.types.URL` : `db.types.STRING(2000)`
+```js
+db.types.URL    //db.types.STRING(2000)
+```
 
 ### Model usage
 
