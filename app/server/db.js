@@ -7,7 +7,9 @@ var fs = require("mz/fs");
 var log = require("./logger").child({component: "db"});
 
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
-  logging: debug
+  logging: function (str) {
+    debug(str);
+  }
 });
 
 db.initialize = function* () {
