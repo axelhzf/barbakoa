@@ -9,7 +9,6 @@ exports.execute = function () {
     storage: 'sequelize',
     storageOptions: {
       sequelize: db,
-      modelName: 'Migration',
       tableName: 'Migrations',
       columnName: 'migration',
       columnType: db.types.STRING(100)
