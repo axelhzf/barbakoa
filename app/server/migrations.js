@@ -2,9 +2,10 @@ var Umzug = require('umzug');
 var db = require("./db");
 var config = require("config");
 var co = require("co");
+var log = require("./logger").child({component: "migrations"});
+
 
 exports.execute = function () {
-  console.log("executing migrations");
   var umzug = new Umzug({
     storage: 'sequelize',
     storageOptions: {
@@ -33,7 +34,7 @@ exports.execute = function () {
     // "migrations" will be an Array with the names of the
     // executed migrations.
     migrations.forEach(function (migration) {
-      console.log("executed migration", migration.file);
+      log.info("Executed migrations [%s]", migration.file);
     });
   });
   
