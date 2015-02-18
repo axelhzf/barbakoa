@@ -56,14 +56,19 @@ function barbakoa() {
 
 //locals
   app.use(function *(next) {
-    this.locals = {
+    if (!this.locals) {
+      this.locals = {};
+    }
+    
+    _.extend(this.locals, {
       _: _,
       flash: this.flash,
       csrf: this.csrf,
       config: config,
       requestPath: this.request.path,
       routeUrl: router.routeUrl
-    };
+    });
+    
     yield *next;
   });
 
