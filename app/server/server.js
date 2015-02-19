@@ -5,7 +5,6 @@ _.mixin(require('safe-obj'));
 
 var co = require("co");
 
-var koaBody = require("koa-body");
 var views = require("koa-views");
 var mount = require("koa-mount");
 var session = require('koa-session');
@@ -23,7 +22,6 @@ var assets = require("./assets");
 var events = require("./events");
 var log = require("./logger").child({component: "server"});
 var migrations = require("./migrations");
-
 
 function barbakoa() {
 
@@ -47,7 +45,8 @@ function barbakoa() {
 
   require('koa-qs')(app); //nested query string
   app.use(require("./error")());
-  app.use(koaBody({multipart: true, formidable: {uploadDir: config.get("uploads.path")}}));
+  require("koa-body-parsers")(app);
+  app.use(require("./bodyParser"));
   app.keys = config.keys;
   app.use(session(app));
   app.use(flash());
@@ -71,7 +70,6 @@ function barbakoa() {
     
     yield *next;
   });
-
 
 // server methods
   var server;
@@ -114,8 +112,7 @@ function barbakoa() {
   barbakoa.mountStatic = mountStatic;
 
   app.on("error", function (e) {
-    console.trace(e);
-    console.trace(e.stack);
+    log.error(e);
   });
 
   return app;
@@ -146,7 +143,6 @@ if (process.env.NODE_ENV === "test") {
     }
   };
 }
-
 
 module.exports = barbakoa;
 
