@@ -2,6 +2,7 @@ var path = require("path");
 var prettyBytes = require("pretty-bytes");
 var format = require("util").format;
 var config = require("config");
+var uuid = require("uuid");
 
 module.exports = function* bodyParser(next) {
   switch (this.request.is('json', 'urlencoded', 'multipart')) {
@@ -25,7 +26,8 @@ module.exports = function* bodyParser(next) {
           var value = part[1];
           this.request.body.fields[key] = value;
         } else {
-          var destination = path.join(config.get("uploads.path"), part.filename);
+          var filename = uuid();
+          var destination = path.join(config.get("uploads.path"), filename);
           yield this.save(part, destination);
           if (part.truncated) {
             var errorMsg = format("File too big. Max size is %s", prettyBytes(fileSizeLimit));
@@ -35,7 +37,8 @@ module.exports = function* bodyParser(next) {
           }
           this.request.body.files[part.fieldname] = {
             path: destination,
-            type: part.mimeType
+            type: part.mimeType,
+            filename: part.filename
           }
         }
       }
