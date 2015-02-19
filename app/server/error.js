@@ -24,6 +24,11 @@ function error(opts) {
 
       var debugErrors = config.get("errors.debug");
 
+      if (err.name === "ValidationError") { //expose joi errors
+        err.expose = true;
+      }
+      
+      
       // accepted types
       switch (this.accepts('html', 'text', 'json')) {
         case 'text':
