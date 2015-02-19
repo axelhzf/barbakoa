@@ -33,6 +33,7 @@ module.exports = function* bodyParser(next) {
             var errorMsg = format("File too big. Max size is %s", prettyBytes(fileSizeLimit));
             var error = new Error(errorMsg);
             error.code = "file_too_big";
+            error.expose = true;
             throw error;
           }
           this.request.body.files[part.fieldname] = {
