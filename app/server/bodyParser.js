@@ -5,6 +5,8 @@ var config = require("config");
 var uuid = require("uuid");
 
 module.exports = function* bodyParser(next) {
+  if (this.request.method !== "POST") return yield next;
+  
   switch (this.request.is('json', 'urlencoded', 'multipart')) {
     case 'json':
       this.request.body = yield* this.request.json();
@@ -48,4 +50,4 @@ module.exports = function* bodyParser(next) {
       this.throw(415, 'i do not know what to do with this request type')
   }
   yield next;
-}
+};
