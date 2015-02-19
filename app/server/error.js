@@ -7,7 +7,7 @@ module.exports = error;
 
 function error(opts) {
   opts = opts || {};
-
+  
   // template
   var path = opts.template || __dirname + '/error.html';
 
@@ -17,17 +17,21 @@ function error(opts) {
       yield next;
       if (404 == this.response.status && !this.response.body) this.throw(404);
     } catch (err) {
+      
+      if (err.name === "ValidationError") { //expose joi errors
+        err.status = 400;
+        err.expose = true;
+        err.message = err.details.map(function (detail) {
+          return {path: detail.path, message: detail.message}
+        });
+      }
+      
       this.status = err.status || 500;
 
       // application
       this.app.emit('error', err, this);
 
       var debugErrors = config.get("errors.debug");
-
-      if (err.name === "ValidationError") { //expose joi errors
-        err.expose = true;
-      }
-      
       
       // accepted types
       switch (this.accepts('html', 'text', 'json')) {

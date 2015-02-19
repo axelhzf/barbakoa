@@ -7,11 +7,6 @@ function validate(value, schema) {
       if (!err) {
         cb(null, value)
       } else {
-        err.status = 400;
-        err.expose = true;
-        err.message = err.details.map(function (detail) {
-          return {path: detail.path, message: detail.message}
-        });
         cb(err);
       }
     });
