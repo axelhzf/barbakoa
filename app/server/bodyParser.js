@@ -9,7 +9,7 @@ module.exports = function* bodyParser(next) {
   
   switch (this.request.is('json', 'urlencoded', 'multipart')) {
     case 'json':
-      this.request.body = yield* this.request.json();
+      this.request.body = yield* this.request.json("2mb");
       break;
     case 'urlencoded':
       this.request.body = yield* this.request.urlencoded();
