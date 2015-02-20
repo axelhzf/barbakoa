@@ -103,7 +103,7 @@
   },
   "scripts": {
     "install": "",
-    "start": "node --harmony app/server/server.js",
+    "start": "NODE_ENV=production NODE_CONFIG_DIR=./app/server/config node --harmony app/server/server.js",
     "test": "NODE_CONFIG_DIR=./app/server/config NODE_ENV=test node --harmony node_modules/.bin/_mocha --reporter spec test/**/*.spec.js",
     "dev": "NODE_CONFIG_DIR=./app/server/config node_modules/.bin/nodemon --harmony app/server/server.js"
   }
