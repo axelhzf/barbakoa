@@ -2,6 +2,8 @@ var config = require("config");
 var http = require('http');
 var path = require("path");
 var cons = require('co-views');
+var fs = require("mz/fs");
+var _ = require("underscore");
 
 module.exports = error;
 
@@ -58,21 +60,20 @@ function error(opts) {
         case 'html':
           var stack = err.stack;
           var frameworkPath = config.get("path.framework");
+          var appPath = config.get("path.app");
 
-          var render = cons(frameworkPath + "/app/server/views/", {default: "jade"});
-          this.body = yield render("error", {stack: stack});
+          var appErrorTemplateExists = yield fs.exists(appPath + "/app/server/views/error.jade");
+          var errorPath = appErrorTemplateExists ? appPath + "/app/server/views/" : frameworkPath + "/app/server/views/";
+          var render = cons(errorPath, {default: "jade"});
+          var locals;
+          if (debugErrors) {
+            locals = _.extend(this.locals, {stack: stack});
+          } else {
+            locals = this.locals;
+          }
+          this.body = yield render("error", locals);
           this.type = 'text/html';
-
-          //yield this.render("error/error", {
-          //  debug: debugErrors,
-          //  ctx: this,
-          //  request: this.request,
-          //  response: this.response,
-          //  error: err.message,
-          //  stack: stack,
-          //  status: this.status,
-          //  code: err.code
-          //});
+          
           break;
       }
     }
