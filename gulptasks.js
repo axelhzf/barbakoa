@@ -39,6 +39,10 @@ module.exports = function (gulp) {
       src: base + "/app/client/fonts/**/*",
       dest: base + "/app/.assets/fonts"
     },
+    static: {
+      src: base + "/app/client/static/**/*",
+      dest: base + "/app/.assets/static"
+    },
     images: {
       src: base + "/app/client/images/**/*",
       dest: base + "/app/.assets/images"
@@ -119,6 +123,11 @@ module.exports = function (gulp) {
     return gulp.src(paths.fonts.src)
       .pipe(gulp.dest(paths.fonts.dest));
   });
+  
+  gulp.task("static", function () {
+    return gulp.src(paths.static.src)
+      .pipe(gulp.dest(paths.static.dest));
+  });
 
   gulp.task("images", function () {
     return gulp.src(paths.images.src)
@@ -151,7 +160,7 @@ module.exports = function (gulp) {
     return gulp.start("less", "fonts");
   });
 
-  gulp.task("build", ["jade", "less", "es6", "fonts", "images"]);
+  gulp.task("build", ["jade", "less", "es6", "fonts", "images", "static"]);
 
   gulp.task('clean', function (cb) {
     return del(paths.clean, cb);
