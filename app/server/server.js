@@ -111,8 +111,8 @@ function barbakoa() {
 
   barbakoa.mountStatic = mountStatic;
 
-  app.on("error", function (e) {
-    log.error(e);
+  app.on("error", function (e, ctx) {
+    log.error(e, {url: ctx.request.url});
   });
 
   return app;
