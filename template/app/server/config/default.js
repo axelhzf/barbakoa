@@ -8,11 +8,14 @@ module.exports = {
     username: "root",
     password: "",
     database: "barbakoa-app",
+    host: "",
+    port: "",
     sync: true,
     forceSync: false
   },
   logs: {
     request: true,
+    src: true,
     path: path.join(__dirname, "../../../logs")
   },
   uploads: {
