@@ -80,7 +80,7 @@ function barbakoa() {
       yield db.initialize();
       yield migrations.execute();
       router.configure(app);
-      server = app.listen(config.get("port"), config.get("ip"));
+      app.server = app.listen(config.get("port"), config.get("ip"));
       yield events.emit("post-start");
     }).catch(function (e) {
       log.error("Error", e);

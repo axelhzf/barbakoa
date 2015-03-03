@@ -10,7 +10,7 @@ module.exports = function (Model, options) {
         limit: Joi.number().integer().min(1),
         offset: Joi.number().integer().min(0),
         order: Joi.string(),
-        where: Joi.array(),
+        where: Joi.any(),
         attributes: Joi.any()
       }));
       var findParams = _.defaults(query || {}, {limit: 5, offset: 0});
