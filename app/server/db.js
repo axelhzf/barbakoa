@@ -9,6 +9,9 @@ var log = require("./logger").child({component: "db"});
 var db = new Sequelize(config.get("db.database"), config.get("db.username"), config.get("db.password"), {
   host: config.get("db.host"),
   port: config.get("db.port"),
+  dialectOptions: {
+    charset: config.has("db.charset") ?  config.get("db.charset") : undefined
+  },
   logging: function (str) {
     debug(str);
   }
