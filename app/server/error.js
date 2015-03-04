@@ -48,6 +48,12 @@ function error(opts) {
           break;
 
         case 'json':
+          
+          if(!_.isArray(err.message)) {
+            err.message = [{message: err.message}];
+          }
+          
+          
           if (debugErrors) {
             this.body = {errors: err.message};
           } else if (err.expose) {
