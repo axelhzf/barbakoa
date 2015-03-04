@@ -1,6 +1,6 @@
 {
   "name": "barbakoa",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "repository": "https://github.com/axelhzf/barbakoa",
   "dependencies": {
     "bluebird": "^2.5.3",
