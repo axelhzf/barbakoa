@@ -96,17 +96,15 @@ function barbakoa() {
 
   function mountStatic(url, path) {
     var staticLib = config.get("assets.cache") ? require("koa-static-cache") : require("koa-static");
-    co(function* () {
-      var exists = yield fs.exists(path);
-      if (exists) {
-        log.debug("mounting %s to %s", path, url);
-        var assets = koa();
-        assets.use(staticLib(path));
-        app.use(mount(url, assets));
-      } else {
-        log.error("path %s doesn't exists", path);
-      }
-    });
+    var exists = fs.existsSync(path);
+    if (exists) {
+      log.debug("mounting %s to %s", path, url);
+      var assets = koa();
+      assets.use(staticLib(path));
+      app.use(mount(url, assets));
+    } else {
+      log.error("path %s doesn't exists", path);
+    }
   }
 
   barbakoa.mountStatic = mountStatic;
