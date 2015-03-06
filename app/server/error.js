@@ -24,7 +24,7 @@ function error(opts) {
         err.status = 400;
         err.expose = true;
         err.message = err.details.map(function (detail) {
-          return {path: detail.path, message: detail.message}
+          return {code: "VALIDATION", path: detail.path, message: detail.message}
         });
       }
       
@@ -50,14 +50,20 @@ function error(opts) {
         case 'json':
           
           if(!_.isArray(err.message)) {
-            err.message = [{message: err.message}];
+            err.message = [{
+              code: err.code,
+              message: err.message
+            }];
           }
           
-          
           if (debugErrors) {
-            this.body = {errors: err.message};
+            this.body = {
+              errors: err.message
+            };
           } else if (err.expose) {
-            this.body = {errors: err.message}
+            this.body = {
+              errors: err.message
+            }
           } else {
             this.body = {errors: http.STATUS_CODES[this.status]}
           }
