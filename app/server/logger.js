@@ -5,7 +5,6 @@ var config = require("config");
 var mkdirp = require("mkdirp");
 var PrettyStream = require('bunyan-prettystream');
 
-
 var logFilename = path.normalize(config.get("logs.path") + "/" + config.get("name") + ".log");
 mkdirp(path.normalize(config.get("logs.path")));
 
