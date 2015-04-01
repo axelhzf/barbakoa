@@ -18,6 +18,8 @@ module.exports = function (gulp) {
   var iconfont = require("gulp-iconfont");
   var consolidate = require("gulp-consolidate");
 
+  var assets = require("./app/server/assets");
+
   var base = process.cwd();
 
   var paths = {
@@ -50,14 +52,20 @@ module.exports = function (gulp) {
   };
 
   gulp.task("less", function () {
-    gulp.src(paths.less.src + "/app.less")
-      .pipe(less({
-        paths: [base + "/app/client/components/"]
-      }))
-      .on("error", gutil.log)
-      .pipe(autoprefixer())
-      .on("error", gutil.log)
-      .pipe(gulp.dest(paths.less.dest));
+    var baseClient = base + "/app/client/";
+
+    assets.getModulesNames().forEach(function (moduleName) {
+      var mod = assets.expandModule(moduleName);
+      gulp.src(baseClient + mod.style)
+        .pipe(less({
+          paths: [base + "/app/client/components/"]
+        }))
+        .on("error", gutil.log)
+        .pipe(autoprefixer())
+        .on("error", gutil.log)
+        .pipe(gulp.dest(paths.less.dest));
+    });
+
   });
 
   gulp.task("jade", function () {
@@ -72,36 +80,43 @@ module.exports = function (gulp) {
       .pipe(gulp.dest(paths.jade.dest))
   });
 
-  gulp.task('es6', function () {
-    var min = config.get("assets.min");
 
-    var assets = require("./app/server/assets");
-    var moduleName = "app";
-    var moduleContent = assets.expandModule(moduleName);
+  var moduleNames = assets.getModulesNames();
 
-    var cwd = base + "/app/client/";
+  var es6tasks = [];
+  moduleNames.forEach(function (moduleName) {
+    var taskName = "es6[" + moduleName + "]";
+    es6tasks.push(taskName);
+    gulp.task(taskName, function () {
+      var min = config.get("assets.min");
+      var assets = require("./app/server/assets");
+      var moduleContent = assets.expandModule(moduleName);
 
-    var jsFiles = moduleContent.js.map(function (item) {
-      return "js/" + item;
+      var cwd = base + "/app/client/";
+
+      var jsFiles = moduleContent.js.map(function (item) {
+        return "js/" + item;
+      });
+
+      var js = gulp.src(jsFiles, {cwd: cwd, base: cwd})
+        .pipe(cached(taskName))
+        .pipe(to5())
+        .on("error", function (e) {
+          console.log(e.message);
+        })
+        .pipe(remember(taskName));
+      var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
+      var merged = streamqueue({objectMode: true}, components, js);
+
+      return merged
+        .pipe(gulpif(min, concat("js/" + moduleName + ".js")))
+        .pipe(gulpif(min, ngAnnotate()))
+        .pipe(gulpif(min, uglify()))
+        .pipe(gulp.dest(paths.js.dest));
     });
-
-    var js = gulp.src(jsFiles, {cwd: cwd, base: cwd})
-      .pipe(cached())
-      .pipe(to5())
-      .on("error", function (e) {
-        console.log(e.message);
-      })
-      .pipe(remember());
-    var components = gulp.src(moduleContent.components, {cwd: cwd, base: cwd});
-    var merged = streamqueue({objectMode: true}, components, js);
-
-    return merged
-      .pipe(gulpif(min, concat("js/" + moduleName + ".js")))
-      .pipe(gulpif(min, ngAnnotate()))
-      .pipe(gulpif(min, uglify()))
-      .pipe(gulp.dest(paths.js.dest));
   });
 
+  gulp.task('es6', es6tasks);
 
   gulp.task('watch', ["default"], function () {
     var assets = require("./app/server/assets");
@@ -166,10 +181,8 @@ module.exports = function (gulp) {
     return del(paths.clean, cb);
   });
 
-
   gulp.task("default", ["clean"], function () {
     return gulp.start("build");
   });
-
 
 };

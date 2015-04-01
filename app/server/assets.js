@@ -74,6 +74,15 @@ exports.expandModule = function (moduleName) {
   
 };
 
+exports.getModulesNames = function () {
+  var pathApp = config.get("path.app");
+  var baseClient = path.join(pathApp, "app", "client");
+  var modules = glob({cwd: baseClient}, "*.json").map(function (file) {
+    return path.basename(file, ".json");
+  });
+  return modules;
+};
+
 exports.getModule = function (moduleName) {
   var min = config.get("assets.min");
   var js;
