@@ -120,12 +120,9 @@ module.exports = function (gulp) {
 
   gulp.task('watch', ["default"], function () {
     var assets = require("./app/server/assets");
-    var moduleName = "app";
-    var moduleContent = assets.expandModule(moduleName);
+    var jsFiles = base + "/app/client/js/**/*.js";
 
-    var jsFiles = moduleContent.js.map(function (item) {
-      return base + "/app/client/js/" + item;
-    });
+    console.log("watch js files", jsFiles);
 
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/**/*.jade"], ["jade"]);

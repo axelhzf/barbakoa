@@ -12,8 +12,8 @@ exports.initialize = function () {
     var gulptasks = require("../../gulptasks");
     gulptasks(gulp);
     
-    gulp.on('err', function () {
-      log.error("[assets] error");
+    gulp.on('err', function (e) {
+      log.error("[assets] error", e);
     });
     
     gulp.on('task_start', function (e) {
