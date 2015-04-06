@@ -122,7 +122,7 @@ module.exports = function (gulp) {
     var assets = require("./app/server/assets");
     var jsFiles = base + "/app/client/js/**/*.js";
 
-    console.log("watch js files", jsFiles);
+    console.log("watching less files ", paths.less.src + "/**/*.less");
 
     gulp.watch([paths.less.src + "/**/*.less"], ["less"]);
     gulp.watch([paths.jade.src + "/**/*.jade"], ["jade"]);
