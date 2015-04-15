@@ -20,7 +20,7 @@ function* dropTables (tableNames) {
     tableNames = _.toArray(arguments);
   }
   var queries = tableNames.map(dropTable);
-  return yield parallel(queries, 4);
+  return yield parallel(queries, 1);
 }
 
 function* createFixtures (fixtures) {
